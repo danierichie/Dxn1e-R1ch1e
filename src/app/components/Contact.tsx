@@ -7,29 +7,29 @@ export default function Contact() {
         {
             icon: "📞",
             label: "Phone",
-            value: "+1 (555) 000-0000",
-            link: "tel:+15550000000",
+            value: "+234 816 992 5603",
+            link: "tel:+2348169925603",
             color: "#00D2FF"
         },
         {
             icon: "📧",
             label: "Email",
-            value: "support@codmvault.com",
-            link: "mailto:support@codmvault.com",
+            value: "danielcodmgaming@gmail.com",
+            link: "mailto:danielcodmgaming@gmail.com",
             color: "#FF6B6B"
         },
         {
-            icon: "💬",
-            label: "WhatsApp Group",
-            value: "Join our community",
-            link: "https://chat.whatsapp.com/JOOjgOlepLyEYteUMAQjYI?mode=gi_c",
-            color: "#25D366"
+            icon: "🎮",
+            label: "Discord",
+            value: "Join our Discord",
+            link: "https://discord.gg/your-discord-code",
+            color: "#5865F2"
         },
         {
             icon: "✈️",
             label: "Telegram",
-            value: "@dan1elcodmetiktok",
-            link: "https://t.me/dan1elcodmetiktok",
+            value: "@dcodmarketplace",
+            link: "https://t.me/dcodmarketplace",
             color: "#0088CC"
         }
     ];

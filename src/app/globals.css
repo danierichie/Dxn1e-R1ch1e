@@ -2,6 +2,7 @@
 
 /* ── Cyber-Industrial Design System ── */
 
+/* Dark Theme (Default) */
 :root {
   --bg-primary: #0D0D0D;
   --bg-secondary: #141414;
@@ -25,6 +26,27 @@
   --radius-md: 12px;
   --radius-lg: 20px;
   --radius-xl: 28px;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8F9FA;
+  --bg-tertiary: #E9ECEF;
+  --bg-glass: rgba(0, 0, 0, 0.04);
+  --bg-glass-hover: rgba(0, 0, 0, 0.08);
+
+  --accent: #1565c0;
+  --accent-dim: rgba(21, 101, 192, 0.3);
+  --accent-glow: rgba(21, 101, 192, 0.15);
+  --accent-subtle: rgba(21, 101, 192, 0.08);
+
+  --text-primary: #1A1A1A;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+
+  --border-glass: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(21, 101, 192, 0.2);
 }
 
 @theme inline {
@@ -266,6 +288,188 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-dim);
+}
+
+/* ── Mobile Optimizations ── */
+
+/* ── Mobile Touch Optimizations ── */
+
+@media (max-width: 768px) {
+  /* Prevent text selection on touch */
+  * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection in input fields */
+  input, textarea, [contenteditable] {
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  
+  /* Better scrolling behavior */
+  html {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+  
+  body {
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Touch-friendly tap targets */
+  .btn-primary,
+  .btn-outline {
+    padding: 16px 24px;
+    font-size: 1rem;
+    min-height: 48px;
+    min-width: 48px;
+    touch-action: manipulation;
+  }
+  
+  /* Interactive elements should be at least 44px */
+  button, a, input, select, textarea, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Mobile glass cards */
+  .glass-card {
+    border-radius: var(--radius-md);
+    margin: 8px;
+    touch-action: manipulation;
+  }
+  
+  /* Mobile sections */
+  .section {
+    padding: 60px 16px;
+  }
+  
+  /* Mobile typography */
+  .section-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+  }
+  
+  /* Touch-friendly spacing */
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  
+  .listings-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  
+  /* Mobile navigation */
+  nav {
+    padding: 12px 16px !important;
+  }
+  
+  /* Mobile modals */
+  .glass-card[style*="position: fixed"] {
+    margin: 16px !important;
+    max-height: calc(100vh - 32px) !important;
+  }
+  
+  /* Better mobile scrolling */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  /* Mobile form elements */
+  input, textarea, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Small mobile optimizations */
+  .section {
+    padding: 40px 12px;
+  }
+  
+  .glass-card {
+    margin: 4px;
+    padding: 16px !important;
+  }
+  
+  /* Mobile buttons */
+  .btn-primary,
+  .btn-outline {
+    padding: 14px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+/* ── Touch Gestures ── */
+@media (hover: none) and (pointer: coarse) {
+  .glass-card:hover {
+    transform: none;
+  }
+  
+  .btn-primary:hover,
+  .btn-outline:hover {
+    transform: none;
+  }
+  
+  /* Active states for touch */
+  .btn-primary:active,
+  .btn-outline:active {
+    transform: scale(0.98);
+  }
+  
+  .glass-card:active {
+    transform: scale(0.99);
+  }
+}
+
+/* ── Safe Area for Notched Phones ── */
+@supports (padding: max(0px)) {
+  .mobile-safe-padding {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  
+  .mobile-safe-bottom {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+/* ── Performance Optimizations ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── High Contrast Mode ── */
+@media (prefers-contrast: high) {
+  .glass-card {
+    border: 2px solid var(--accent);
+  }
+  
+  .btn-primary {
+    border: 2px solid var(--bg-primary);
+  }
 }
 
 /* ── Reveal Animation ── */

@@ -1,10 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { initialListings } from "../data/seedData";
 import CommunitySection from "../components/CommunitySection";
+import ReviewSystem from "../components/ReviewSystem";
+import ReviewForm from "../components/ReviewForm";
+import AuthPrompt from "../components/AuthPrompt";
 import { formatDualPrice, WHATSAPP_PRIVATE_URL } from "../../lib/utils";
 import { getListings, getOrders, saveOrders } from "../../lib/data";
+import { useAuth } from "../contexts/AuthContext";
+import { SkeletonCard } from "../components/LoadingComponents";
+import { usePerformanceMonitor } from "../components/PerformanceUtils";
 
 interface Listing {
     id: number;
@@ -38,12 +45,21 @@ interface Order {
 const sortByPrice = (data: Listing[]) => [...data].sort((a, b) => a.price - b.price);
 
 export default function MarketplacePage() {
+    const { user } = useAuth();
+    const router = useRouter();
     const [listings, setListings] = useState<Listing[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
     const [paymentStep, setPaymentStep] = useState<'details' | 'bank' | 'upload' | 'verify'>('details');
     const [uploadedScreenshot, setUploadedScreenshot] = useState<string | undefined>(undefined);
     const [orders, setOrders] = useState<Order[]>([]);
+    const [showReviewForm, setShowReviewForm] = useState(false);
+    const [purchasedListing, setPurchasedListing] = useState<Listing | null>(null);
+    const [showAuthPrompt, setShowAuthPrompt] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Performance monitoring
+    usePerformanceMonitor('MarketplacePage');
 
     const filteredListings = searchQuery.trim()
         ? listings.filter((l) =>
@@ -64,6 +80,7 @@ export default function MarketplacePage() {
 
     useEffect(() => {
         let cancelled = false;
+        setIsLoading(true);
         (async () => {
             const data = await getListings();
             if (cancelled) return;
@@ -80,6 +97,7 @@ export default function MarketplacePage() {
                 const savedOrders = localStorage.getItem("orders");
                 if (savedOrders) setOrders(JSON.parse(savedOrders));
             }
+            setIsLoading(false);
         })();
         return () => { cancelled = true; };
     }, []);
@@ -119,6 +137,41 @@ export default function MarketplacePage() {
                 </p>
             </div>
 
+            {/* User Welcome Banner */}
+            {user && (
+                <div className="glass-card" style={{ 
+                    padding: "20px", 
+                    marginBottom: 32, 
+                    background: "linear-gradient(135deg, rgba(21, 101, 192, 0.1), rgba(21, 101, 192, 0.05))",
+                    border: "1px solid var(--accent-subtle)"
+                }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                        <div style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            background: "var(--accent)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "white",
+                            fontSize: "1rem",
+                            fontWeight: "bold"
+                        }}>
+                            {user.fullName.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                            <div style={{ fontSize: "1rem", fontWeight: 600, color: "var(--text-primary)" }}>
+                                Welcome back, {user.fullName}!
+                            </div>
+                            <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                                Ready to find your next elite account?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Search */}
             <div className="glass-card" style={{ padding: 20, marginBottom: 32 }}>
                 <label htmlFor="marketplace-search" style={{ display: "block", fontSize: "0.8rem", color: "var(--text-tertiary)", marginBottom: 8 }}>Search by title</label>
@@ -141,7 +194,13 @@ export default function MarketplacePage() {
             </div>
 
             {/* Results - sorted lowest to highest price */}
-            {filteredListings.length === 0 ? (
+            {isLoading ? (
+                <div className="listings-grid" style={{ display: "grid", gap: 24 }}>
+                    {Array.from({ length: 6 }, (_, i) => (
+                        <SkeletonCard key={i} />
+                    ))}
+                </div>
+            ) : filteredListings.length === 0 ? (
                 <div style={{ textAlign: "center", padding: "100px 0" }}>
                     <div style={{ fontSize: "3rem", marginBottom: 20 }}>🔍</div>
                     <h3 style={{ fontSize: "1.2rem", marginBottom: 8 }}>{searchQuery.trim() ? "No accounts match your search" : "No accounts found"}</h3>
@@ -193,13 +252,30 @@ export default function MarketplacePage() {
                                     </div>
                                 </div>
 
-                                <button
-                                    className="btn-primary"
-                                    style={{ width: "100%", padding: "12px" }}
-                                    onClick={() => setSelectedListing(listing)}
-                                >
-                                    View Details →
-                                </button>
+                                {user ? (
+                                    <button
+                                        className="btn-primary"
+                                        style={{ width: "100%", padding: "12px" }}
+                                        onClick={() => setSelectedListing(listing)}
+                                    >
+                                        View Details →
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="btn-primary"
+                                        style={{ 
+                                            width: "100%", 
+                                            padding: "12px",
+                                            background: "var(--accent-dim)",
+                                            cursor: "pointer",
+                                            position: "relative"
+                                        }}
+                                        onClick={() => setShowAuthPrompt(true)}
+                                        title="Sign in required to purchase"
+                                    >
+                                        🔒 Sign In Required
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}
@@ -457,6 +533,8 @@ export default function MarketplacePage() {
                                         localStorage.setItem("orders", JSON.stringify(updatedOrders));
                                         saveOrders(updatedOrders);
                                         window.open(WHATSAPP_PRIVATE_URL, '_blank');
+                                        setPurchasedListing(selectedListing!);
+                                        setShowReviewForm(true);
                                         setSelectedListing(null);
                                         setPaymentStep('details');
                                         setUploadedScreenshot(undefined);
@@ -473,6 +551,8 @@ export default function MarketplacePage() {
                     </div>
                 </div>
             )}
+
+            <ReviewSystem />
 
             <CommunitySection />
 
@@ -494,6 +574,38 @@ export default function MarketplacePage() {
                     }
                 }
             `}</style>
+
+            {/* Review Form */}
+            {showReviewForm && purchasedListing && (
+                <ReviewForm
+                    listingId={purchasedListing.id}
+                    listingTitle={purchasedListing.title}
+                    onReviewSubmitted={(review) => {
+                        console.log('Review submitted:', review);
+                        setShowReviewForm(false);
+                        setPurchasedListing(null);
+                    }}
+                    onClose={() => {
+                        setShowReviewForm(false);
+                        setPurchasedListing(null);
+                    }}
+                />
+            )}
+
+            {/* Auth Prompt */}
+            {showAuthPrompt && (
+                <AuthPrompt
+                    onClose={() => setShowAuthPrompt(false)}
+                    onSignIn={() => {
+                        setShowAuthPrompt(false);
+                        router.push("/login");
+                    }}
+                    onSignUp={() => {
+                        setShowAuthPrompt(false);
+                        router.push("/signup");
+                    }}
+                />
+            )}
         </main>
     );
 }

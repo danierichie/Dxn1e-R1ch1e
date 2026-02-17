@@ -3,6 +3,10 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import NotificationSystemClient from "./components/NotificationSystemClient";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -70,8 +74,15 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <div className="gradient-bar" />
-        <Navbar />
-        {children}
+        <ErrorBoundary>
+          <ThemeProvider>
+            <AuthProvider>
+              <Navbar />
+              <NotificationSystemClient />
+              {children}
+            </AuthProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
         <Footer />
       </body>
     </html>

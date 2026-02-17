@@ -4,7 +4,6 @@ import React from "react";
 
 const footerLinks = {
     Support: ["Help Center", "Contact Us", "Dispute Resolution", "Trust & Safety"],
-    Company: ["About Us", "Blog", "Careers", "Press"],
 };
 
 export default function Footer() {
@@ -25,7 +24,7 @@ export default function Footer() {
                 <div
                     style={{
                         display: "grid",
-                        gridTemplateColumns: "2fr 1fr 1fr",
+                        gridTemplateColumns: "2fr 1fr",
                         gap: 48,
                     }}
                     className="footer-grid"
@@ -197,11 +196,6 @@ export default function Footer() {
 
             <style>{`
         @media (max-width: 768px) {
-          .footer-grid {
-            grid-template-columns: 1fr 1fr !important;
-          }
-        }
-        @media (max-width: 480px) {
           .footer-grid {
             grid-template-columns: 1fr !important;
           }

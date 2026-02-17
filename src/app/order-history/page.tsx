@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { formatDualPrice } from "../../lib/utils";
 import { getOrders, getListings, saveOrders } from "../../lib/data";
+import { useAuth } from "../contexts/AuthContext";
 
 interface Listing {
     id: number;
@@ -34,6 +35,7 @@ interface Order {
 }
 
 export default function OrderHistoryPage() {
+    const { user } = useAuth();
     const [orders, setOrders] = useState<Order[]>([]);
     const [listings, setListings] = useState<Listing[]>([]);
 
@@ -55,6 +57,13 @@ export default function OrderHistoryPage() {
         })();
         return () => { cancelled = true; };
     }, []);
+
+    // Filter orders by user (in a real app, this would be done server-side)
+    const userOrders = user ? orders : [];
+
+    const getOrderListing = (orderId: number) => {
+        return listings.find(listing => listing.id === orderId);
+    };
 
     const completeOrder = (orderId: number) => {
         const updatedOrders = orders.map(order =>
@@ -78,7 +87,20 @@ export default function OrderHistoryPage() {
                 </p>
             </div>
 
-            {orders.length === 0 ? (
+            {!user ? (
+                <div style={{ textAlign: "center", padding: "100px 0" }}>
+                    <div style={{ fontSize: "3rem", marginBottom: 20 }}>🔒</div>
+                    <h3 style={{ fontSize: "1.2rem", marginBottom: 8 }}>Sign In Required</h3>
+                    <p style={{ color: "var(--text-tertiary)", marginBottom: 24 }}>Please sign in to view your order history.</p>
+                    <button 
+                        onClick={() => window.location.href = '/'}
+                        className="btn-primary"
+                        style={{ padding: "12px 24px" }}
+                    >
+                        Sign In
+                    </button>
+                </div>
+            ) : userOrders.length === 0 ? (
                 <div style={{ textAlign: "center", padding: "100px 0" }}>
                     <div style={{ fontSize: "3rem", marginBottom: 20 }}>📦</div>
                     <h3 style={{ fontSize: "1.2rem", marginBottom: 8 }}>No orders yet</h3>
@@ -86,7 +108,7 @@ export default function OrderHistoryPage() {
                 </div>
             ) : (
                 <div style={{ display: "grid", gap: 24 }}>
-                    {orders.map((order) => {
+                    {userOrders.map((order) => {
                         const listing = getListingById(order.listingId);
                         return (
                             <div

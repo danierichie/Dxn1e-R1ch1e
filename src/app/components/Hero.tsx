@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Hero() {
+    const { user } = useAuth();
     return (
         <section
             id="hero"
@@ -85,7 +89,7 @@ export default function Hero() {
                         color: "var(--text-secondary)",
                         letterSpacing: "0.2em",
                         textTransform: "uppercase",
-                        marginBottom: 12,
+                        marginBottom: 0,
                     }}
                 >
                     Welcome to
@@ -146,6 +150,23 @@ export default function Hero() {
                     with escrow protection.
                 </p>
 
+                {/* Additional message for non-authenticated users */}
+                {!user && (
+                    <p
+                        style={{
+                            fontSize: "clamp(0.9rem, 1.5vw, 1.05rem)",
+                            color: "var(--accent)",
+                            marginBottom: 40,
+                            lineHeight: 1.6,
+                            maxWidth: 600,
+                            margin: "0 auto 40px",
+                            fontWeight: 500,
+                        }}
+                    >
+                        Login or sign up to browse the full marketplace and start selling your accounts
+                    </p>
+                )}
+
                 {/* CTAs */}
                 <div
                     style={{
@@ -155,59 +176,74 @@ export default function Hero() {
                         flexWrap: "wrap",
                     }}
                 >
-                    <Link href="/marketplace" className="btn-primary">
-                        <span>🎯</span> Browse Accounts
-                    </Link>
-                    <Link href="/how-it-works" className="btn-outline">
-                        How It Works
-                    </Link>
+                    {user ? (
+                        <>
+                            <Link href="/marketplace" className="btn-primary">
+                                <span>🎯</span> See Available Accounts
+                            </Link>
+                            <Link href="/how-it-works" className="btn-outline">
+                                How It Works
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link href="/login" className="btn-primary">
+                                <span>🔐</span> Login
+                            </Link>
+                            <Link href="/signup" className="btn-outline">
+                                Sign Up
+                            </Link>
+                        </>
+                    )}
                 </div>
 
-                {/* Stats Bar */}
-                <div
-                    style={{
-                        display: "flex",
-                        gap: 48,
-                        justifyContent: "center",
-                        flexWrap: "wrap",
-                        marginTop: 64,
-                        paddingTop: 40,
-                        borderTop: "1px solid var(--border-glass)",
-                    }}
-                >
-                    {[
-                        { value: "12,400+", label: "Accounts Sold" },
-                        { value: "$2.1M+", label: "Total Volume" },
-                        { value: "99.7%", label: "Success Rate" },
-                    ].map((stat) => (
-                        <div key={stat.label} style={{ textAlign: "center" }}>
-                            <div
-                                style={{
-                                    fontSize: "1.8rem",
-                                    fontWeight: 800,
-                                    color: "var(--accent)",
-                                    letterSpacing: "-0.02em",
-                                    fontFamily: "var(--font-mono, monospace)",
-                                }}
-                            >
-                                {stat.value}
+                {/* Stats Bar - Only show for authenticated users */}
+                {user && (
+                    <div
+                        style={{
+                            display: "flex",
+                            gap: 48,
+                            justifyContent: "center",
+                            flexWrap: "wrap",
+                            marginTop: 64,
+                            paddingTop: 40,
+                            borderTop: "1px solid var(--border-glass)",
+                        }}
+                    >
+                        {[
+                            { value: "12,400+", label: "Accounts Sold" },
+                            { value: "$2.1M+", label: "Total Volume" },
+                            { value: "99.7%", label: "Success Rate" },
+                        ].map((stat) => (
+                            <div key={stat.label} style={{ textAlign: "center" }}>
+                                <div
+                                    style={{
+                                        fontSize: "1.8rem",
+                                        fontWeight: 800,
+                                        color: "var(--accent)",
+                                        letterSpacing: "-0.02em",
+                                        fontFamily: "var(--font-mono, monospace)",
+                                    }}
+                                >
+                                    {stat.value}
+                                </div>
+                                <div
+                                    style={{
+                                        fontSize: "0.85rem",
+                                        color: "var(--text-tertiary)",
+                                        marginTop: 4,
+                                        fontWeight: 500,
+                                    }}
+                                >
+                                    {stat.label}
+                                </div>
                             </div>
-                            <div
-                                style={{
-                                    fontSize: "0.85rem",
-                                    color: "var(--text-tertiary)",
-                                    marginTop: 4,
-                                    fontWeight: 500,
-                                }}
-                            >
-                                {stat.label}
-                            </div>
-                        </div>
-                    ))}
-                    <p style={{ width: "100%", fontSize: "0.7rem", color: "var(--text-tertiary)", marginTop: 8, opacity: 0.8 }}>
-                        Community stats — trusted by players worldwide
-                    </p>
-                </div>
+                        ))}
+                        <p style={{ width: "100%", fontSize: "0.7rem", color: "var(--text-tertiary)", marginTop: 8, opacity: 0.8 }}>
+                            Community stats — trusted by players worldwide
+                        </p>
+                    </div>
+                )}
             </div>
         </section>
     );
