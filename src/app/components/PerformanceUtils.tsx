@@ -56,9 +56,8 @@ export function OptimizedImage({
           loading={priority ? "eager" : "lazy"}
           onLoad={() => setIsLoaded(true)}
           onError={() => setHasError(true)}
-          className={`transition-opacity duration-300 ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
-          } ${className}`}
+          className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'
+            } ${className}`}
           {...props}
         />
       )}
@@ -68,7 +67,7 @@ export function OptimizedImage({
 
 // Intersection Observer Hook for lazy loading
 export function useIntersectionObserver(
-  ref: React.RefObject<Element>,
+  ref: React.RefObject<Element | null>,
   options: IntersectionObserverInit = {}
 ) {
   const [isIntersecting, setIsIntersecting] = React.useState(false);

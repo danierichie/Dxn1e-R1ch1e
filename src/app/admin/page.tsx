@@ -77,7 +77,7 @@ export default function AdminPage() {
             if (cancelled) return;
             if (Array.isArray(listingsData) && listingsData.length >= 0) setListings(listingsData as Listing[]);
             else {
-                const saved = localStorage.getItem("market_listings");
+                const saved = localStorage.getItem("market_listings_v2");
                 if (saved) setListings(JSON.parse(saved));
             }
             if (Array.isArray(ordersData) && ordersData.length >= 0) setOrders(ordersData as Order[]);
@@ -162,7 +162,7 @@ export default function AdminPage() {
         if (useUrl) {
             const updated = [...listings, listing];
             setListings(updated);
-            localStorage.setItem("market_listings", JSON.stringify(updated));
+            localStorage.setItem("market_listings_v2", JSON.stringify(updated));
             addListing(listing);
             setNewListing({
                 title: "", price: "", uid: "", mythicWeapons: "", legendaryWeapons: "",
@@ -176,7 +176,7 @@ export default function AdminPage() {
         // Otherwise: save listing first, then attach video from file in background
         const updated = [...listings, listing];
         setListings(updated);
-        localStorage.setItem("market_listings", JSON.stringify(updated));
+        localStorage.setItem("market_listings_v2", JSON.stringify(updated));
         addListing(listing);
 
         setNewListing({
@@ -194,12 +194,12 @@ export default function AdminPage() {
         reader.readAsDataURL(fileToEncode!);
         reader.onload = () => {
             const videoUrl = reader.result as string;
-            const saved = localStorage.getItem("market_listings");
+            const saved = localStorage.getItem("market_listings_v2");
             const data = saved ? JSON.parse(saved) : [];
             const withVideo = data.map((l: Listing) =>
                 l.id === newId ? { ...l, videoUrl } : l
             );
-            localStorage.setItem("market_listings", JSON.stringify(withVideo));
+            localStorage.setItem("market_listings_v2", JSON.stringify(withVideo));
             setListings(withVideo);
             saveListings(withVideo);
         };
@@ -506,7 +506,7 @@ export default function AdminPage() {
                                                         onClick={() => {
                                                             const updated = listings.filter(item => item.id !== l.id);
                                                             setListings(updated);
-                                                            localStorage.setItem("market_listings", JSON.stringify(updated));
+                                                            localStorage.setItem("market_listings_v2", JSON.stringify(updated));
                                                             saveListings(updated);
                                                         }}
                                                         style={{ background: "none", border: "none", color: "#FF6B6B", cursor: "pointer", fontSize: "0.8rem" }}>Delete</button>

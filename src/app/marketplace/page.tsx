@@ -64,17 +64,17 @@ export default function MarketplacePage() {
     const filteredListings = searchQuery.trim()
         ? listings.filter((l) =>
             l.title.toLowerCase().includes(searchQuery.toLowerCase().trim())
-          )
+        )
         : listings;
 
     const loadListingsFromStorage = () => {
-        const saved = localStorage.getItem("market_listings");
+        const saved = localStorage.getItem("market_listings_v2");
         if (saved) {
             const data = JSON.parse(saved);
             setListings(sortByPrice(data));
         } else {
             setListings(sortByPrice(initialListings));
-            localStorage.setItem("market_listings", JSON.stringify(initialListings));
+            localStorage.setItem("market_listings_v2", JSON.stringify(initialListings));
         }
     };
 
@@ -105,14 +105,14 @@ export default function MarketplacePage() {
     // Re-sync when another tab (e.g. admin) updates listings, or when user returns to this tab
     useEffect(() => {
         const onStorage = (e: StorageEvent) => {
-            if (e.key === "market_listings" && e.newValue) {
+            if (e.key === "market_listings_v2" && e.newValue) {
                 const data = JSON.parse(e.newValue);
                 setListings(sortByPrice(data));
             }
         };
         const onVisible = () => {
             if (document.visibilityState !== "visible") return;
-            const saved = localStorage.getItem("market_listings");
+            const saved = localStorage.getItem("market_listings_v2");
             if (saved) {
                 const data = JSON.parse(saved);
                 setListings(sortByPrice(data));
@@ -139,9 +139,9 @@ export default function MarketplacePage() {
 
             {/* User Welcome Banner */}
             {user && (
-                <div className="glass-card" style={{ 
-                    padding: "20px", 
-                    marginBottom: 32, 
+                <div className="glass-card" style={{
+                    padding: "20px",
+                    marginBottom: 32,
                     background: "linear-gradient(135deg, rgba(21, 101, 192, 0.1), rgba(21, 101, 192, 0.05))",
                     border: "1px solid var(--accent-subtle)"
                 }}>
@@ -263,8 +263,8 @@ export default function MarketplacePage() {
                                 ) : (
                                     <button
                                         className="btn-primary"
-                                        style={{ 
-                                            width: "100%", 
+                                        style={{
+                                            width: "100%",
                                             padding: "12px",
                                             background: "var(--accent-dim)",
                                             cursor: "pointer",
@@ -342,13 +342,29 @@ export default function MarketplacePage() {
                                 aspectRatio: "16 / 9"
                             }}>
                                 {selectedListing.videoUrl ? (
-                                    <video
-                                        src={selectedListing.videoUrl}
-                                        controls
-                                        autoPlay
-                                        loop
-                                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                                    />
+                                    selectedListing.videoUrl.includes("youtube.com") ||
+                                        selectedListing.videoUrl.includes("youtu.be") ||
+                                        selectedListing.videoUrl.includes("vimeo.com") ? (
+                                        <iframe
+                                            src={selectedListing.videoUrl
+                                                .replace("watch?v=", "embed/")
+                                                .replace("vimeo.com/", "player.vimeo.com/video/")
+                                            }
+                                            style={{ width: "100%", height: "100%", border: "none" }}
+                                            allow="autoplay; encrypted-media; picture-in-picture"
+                                            allowFullScreen
+                                        />
+                                    ) : (
+                                        <video
+                                            src={selectedListing.videoUrl}
+                                            controls
+                                            autoPlay
+                                            muted
+                                            playsInline
+                                            loop
+                                            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                                        />
+                                    )
                                 ) : (
                                     <div style={{ textAlign: "center", padding: 40 }}>
                                         <div style={{ fontSize: "3rem", marginBottom: 16 }}>🎬</div>
@@ -359,193 +375,193 @@ export default function MarketplacePage() {
 
                             {/* Details Section */}
                             {paymentStep === 'details' && (
-                            <div style={{ padding: "32px 24px" }}>
-                                <div style={{ marginBottom: 32 }}>
-                                    <div style={{ color: "var(--accent)", fontWeight: 700, fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: 2, marginBottom: 8 }}>
-                                        Verified Account
-                                    </div>
-                                    <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>{selectedListing.title}</h2>
-                                    <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                                        <span style={{ fontSize: "2rem", fontWeight: 800, color: "var(--accent)" }}>
-                                            {formatDualPrice(selectedListing.price)}
-                                        </span>
-                                        <span style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>one-time payment</span>
-                                    </div>
-                                </div>
-
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px 32px", marginBottom: 40 }}>
-                                    {[
-                                        { label: "Mythic Weapons", value: selectedListing.mythicWeapons || 0 },
-                                        { label: "Legendary Weapons", value: selectedListing.legendaryWeapons || 0, color: "var(--accent)" },
-                                        { label: "Mythic Skins", value: selectedListing.mythicSkins || 0 },
-                                        { label: "Legendary Skins", value: selectedListing.legendarySkins || 0 },
-                                        { label: "Legendary Vehicles", value: selectedListing.legendaryVehicles || 0 }
-                                    ].map((stat, i) => (
-                                        <div key={i}>
-                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 4 }}>{stat.label}</div>
-                                            <div style={{ fontSize: "1.1rem", fontWeight: 700, color: stat.color || "white" }}>{stat.value}</div>
+                                <div style={{ padding: "32px 24px" }}>
+                                    <div style={{ marginBottom: 32 }}>
+                                        <div style={{ color: "var(--accent)", fontWeight: 700, fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: 2, marginBottom: 8 }}>
+                                            Verified Account
                                         </div>
-                                    ))}
-                                </div>
-
-                                <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
-                                    {selectedListing.rareSkins && (
-                                        <div>
-                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>OG / Rare Skins</div>
-                                            <div style={{ fontSize: "0.95rem", color: "white", lineHeight: 1.6, background: "rgba(21, 101, 192, 0.08)", padding: 16, borderRadius: 12, border: "1px solid rgba(21, 101, 192, 0.2)" }}>{selectedListing.rareSkins}</div>
-                                        </div>
-                                    )}
-                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-                                        <div>
-                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Account UID</div>
-                                            <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontFamily: "monospace", wordBreak: "break-all" }}>{selectedListing.uid || "N/A"}</div>
-                                        </div>
-                                        <div>
-                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Linked To</div>
-                                            <div style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>{selectedListing.accountLinks || "Activision"}</div>
+                                        <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>{selectedListing.title}</h2>
+                                        <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                                            <span style={{ fontSize: "2rem", fontWeight: 800, color: "var(--accent)" }}>
+                                                {formatDualPrice(selectedListing.price)}
+                                            </span>
+                                            <span style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>one-time payment</span>
                                         </div>
                                     </div>
-                                </div>
 
-                                <button className="btn-primary" style={{ width: "100%", padding: "16px", fontSize: "1rem" }} onClick={() => setPaymentStep('bank')}>
-                                    Buy This Account
-                                </button>
-                                <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem", marginTop: 16 }}>
-                                    Secured via Escrow Protection
-                                </p>
-                            </div>
+                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px 32px", marginBottom: 40 }}>
+                                        {[
+                                            { label: "Mythic Weapons", value: selectedListing.mythicWeapons || 0 },
+                                            { label: "Legendary Weapons", value: selectedListing.legendaryWeapons || 0, color: "var(--accent)" },
+                                            { label: "Mythic Skins", value: selectedListing.mythicSkins || 0 },
+                                            { label: "Legendary Skins", value: selectedListing.legendarySkins || 0 },
+                                            { label: "Legendary Vehicles", value: selectedListing.legendaryVehicles || 0 }
+                                        ].map((stat, i) => (
+                                            <div key={i}>
+                                                <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 4 }}>{stat.label}</div>
+                                                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: stat.color || "white" }}>{stat.value}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
+                                        {selectedListing.rareSkins && (
+                                            <div>
+                                                <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>OG / Rare Skins</div>
+                                                <div style={{ fontSize: "0.95rem", color: "white", lineHeight: 1.6, background: "rgba(21, 101, 192, 0.08)", padding: 16, borderRadius: 12, border: "1px solid rgba(21, 101, 192, 0.2)" }}>{selectedListing.rareSkins}</div>
+                                            </div>
+                                        )}
+                                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                                            <div>
+                                                <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Account UID</div>
+                                                <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontFamily: "monospace", wordBreak: "break-all" }}>{selectedListing.uid || "N/A"}</div>
+                                            </div>
+                                            <div>
+                                                <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Linked To</div>
+                                                <div style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>{selectedListing.accountLinks || "Activision"}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button className="btn-primary" style={{ width: "100%", padding: "16px", fontSize: "1rem" }} onClick={() => setPaymentStep('bank')}>
+                                        Buy This Account
+                                    </button>
+                                    <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem", marginTop: 16 }}>
+                                        Secured via Escrow Protection
+                                    </p>
+                                </div>
                             )}
 
                             {/* Bank Details Section */}
                             {paymentStep === 'bank' && (
-                            <div style={{ padding: "32px 24px" }}>
-                                <div style={{ marginBottom: 32 }}>
-                                    <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>Payment Details</h2>
-                                    <p style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>Transfer the exact amount to the following account details in NGN.</p>
-                                </div>
+                                <div style={{ padding: "32px 24px" }}>
+                                    <div style={{ marginBottom: 32 }}>
+                                        <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>Payment Details</h2>
+                                        <p style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>Transfer the exact amount to the following account details in NGN.</p>
+                                    </div>
 
-                                <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
-                                    <div>
-                                        <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Bank Name</div>
-                                        <div style={{ fontSize: "1.1rem", fontWeight: 700 }}>MONIEPOINT MFB</div>
-                                    </div>
-                                    <div>
-                                        <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Account Number</div>
-                                        <div style={{ fontSize: "1.1rem", fontWeight: 700, fontFamily: "monospace" }}>6852143015</div>
-                                    </div>
-                                    <div>
-                                        <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Account Name</div>
-                                        <div style={{ fontSize: "1.1rem", fontWeight: 700 }}>D-CODE MARKETPLACELIMITED</div>
-                                    </div>
-                                    <div>
-                                        <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Amount</div>
-                                        <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--accent)" }}>
-                                            {formatDualPrice(selectedListing.price)}
+                                    <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
+                                        <div>
+                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Bank Name</div>
+                                            <div style={{ fontSize: "1.1rem", fontWeight: 700 }}>MONIEPOINT MFB</div>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Account Number</div>
+                                            <div style={{ fontSize: "1.1rem", fontWeight: 700, fontFamily: "monospace" }}>6852143015</div>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Account Name</div>
+                                            <div style={{ fontSize: "1.1rem", fontWeight: 700 }}>D-CODE MARKETPLACELIMITED</div>
+                                        </div>
+                                        <div>
+                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Amount</div>
+                                            <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--accent)" }}>
+                                                {formatDualPrice(selectedListing.price)}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <button className="btn-primary" style={{ width: "100%", padding: "16px", fontSize: "1rem" }} onClick={() => setPaymentStep('upload')}>
-                                    I Have Paid - Upload Screenshot
-                                </button>
-                                <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem", marginTop: 16 }}>
-                                    Make sure to include the transaction reference in the screenshot
-                                </p>
-                            </div>
+                                    <button className="btn-primary" style={{ width: "100%", padding: "16px", fontSize: "1rem" }} onClick={() => setPaymentStep('upload')}>
+                                        I Have Paid - Upload Screenshot
+                                    </button>
+                                    <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem", marginTop: 16 }}>
+                                        Make sure to include the transaction reference in the screenshot
+                                    </p>
+                                </div>
                             )}
 
                             {/* Upload Screenshot Section */}
                             {paymentStep === 'upload' && (
-                            <div style={{ padding: "32px 24px" }}>
-                                <div style={{ marginBottom: 32 }}>
-                                    <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>Upload Payment Screenshot</h2>
-                                    <p style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>Please upload a clear screenshot of your payment confirmation showing the transaction details.</p>
-                                </div>
-
-                                <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
-                                    <div>
-                                        <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 700, marginBottom: 8 }}>Select Screenshot</label>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={(e) => {
-                                                const file = e.target.files?.[0];
-                                                if (file) {
-                                                    const reader = new FileReader();
-                                                    reader.onload = (e) => {
-                                                        setUploadedScreenshot(e.target?.result as string);
-                                                        setPaymentStep('verify');
-                                                    };
-                                                    reader.readAsDataURL(file);
-                                                }
-                                            }}
-                                            style={{
-                                                width: "100%",
-                                                padding: "12px",
-                                                border: "1px solid var(--border-glass)",
-                                                borderRadius: 8,
-                                                background: "rgba(255,255,255,0.05)",
-                                                color: "white"
-                                            }}
-                                        />
+                                <div style={{ padding: "32px 24px" }}>
+                                    <div style={{ marginBottom: 32 }}>
+                                        <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>Upload Payment Screenshot</h2>
+                                        <p style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>Please upload a clear screenshot of your payment confirmation showing the transaction details.</p>
                                     </div>
-                                </div>
 
-                                <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem" }}>
-                                    Supported formats: JPG, PNG, GIF. Max size: 5MB
-                                </p>
-                            </div>
+                                    <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
+                                        <div>
+                                            <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 700, marginBottom: 8 }}>Select Screenshot</label>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        const reader = new FileReader();
+                                                        reader.onload = (e) => {
+                                                            setUploadedScreenshot(e.target?.result as string);
+                                                            setPaymentStep('verify');
+                                                        };
+                                                        reader.readAsDataURL(file);
+                                                    }
+                                                }}
+                                                style={{
+                                                    width: "100%",
+                                                    padding: "12px",
+                                                    border: "1px solid var(--border-glass)",
+                                                    borderRadius: 8,
+                                                    background: "rgba(255,255,255,0.05)",
+                                                    color: "white"
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem" }}>
+                                        Supported formats: JPG, PNG, GIF. Max size: 5MB
+                                    </p>
+                                </div>
                             )}
 
                             {/* Verify Payment Section */}
                             {paymentStep === 'verify' && (
-                            <div style={{ padding: "32px 24px" }}>
-                                <div style={{ marginBottom: 32 }}>
-                                    <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>Review Payment Screenshot</h2>
-                                    <p style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>Please review the uploaded screenshot. If everything looks correct, click verify to contact support.</p>
-                                </div>
-
-                                <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
-                                    <div>
-                                        <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Uploaded Screenshot</div>
-                                        {/* eslint-disable-next-line @next/next/no-img-element -- user-uploaded data URL */}
-                                        <img
-                                            src={uploadedScreenshot}
-                                            alt="Payment Screenshot"
-                                            style={{ width: "100%", maxHeight: 400, objectFit: "contain", borderRadius: 8, border: "1px solid var(--border-glass)" }}
-                                        />
+                                <div style={{ padding: "32px 24px" }}>
+                                    <div style={{ marginBottom: 32 }}>
+                                        <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>Review Payment Screenshot</h2>
+                                        <p style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>Please review the uploaded screenshot. If everything looks correct, click verify to contact support.</p>
                                     </div>
-                                </div>
 
-                                <button
-                                    className="btn-primary"
-                                    style={{ width: "100%", padding: "16px", fontSize: "1rem" }}
-                                    onClick={() => {
-                                        const newOrder: Order = {
-                                            id: Date.now(),
-                                            listingId: selectedListing!.id,
-                                            status: 'pending',
-                                            timestamp: new Date().toISOString(),
-                                            screenshot: uploadedScreenshot!,
-                                        };
-                                        const updatedOrders = [...orders, newOrder];
-                                        setOrders(updatedOrders);
-                                        localStorage.setItem("orders", JSON.stringify(updatedOrders));
-                                        saveOrders(updatedOrders);
-                                        window.open(WHATSAPP_PRIVATE_URL, '_blank');
-                                        setPurchasedListing(selectedListing!);
-                                        setShowReviewForm(true);
-                                        setSelectedListing(null);
-                                        setPaymentStep('details');
-                                        setUploadedScreenshot(undefined);
-                                    }}
-                                >
-                                    Verify Payment (Contact Support)
-                                </button>
-                                <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem", marginTop: 16 }}>
-                                    This will open WhatsApp to discuss your payment verification
-                                </p>
-                            </div>
+                                    <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
+                                        <div>
+                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Uploaded Screenshot</div>
+                                            {/* eslint-disable-next-line @next/next/no-img-element -- user-uploaded data URL */}
+                                            <img
+                                                src={uploadedScreenshot}
+                                                alt="Payment Screenshot"
+                                                style={{ width: "100%", maxHeight: 400, objectFit: "contain", borderRadius: 8, border: "1px solid var(--border-glass)" }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        className="btn-primary"
+                                        style={{ width: "100%", padding: "16px", fontSize: "1rem" }}
+                                        onClick={() => {
+                                            const newOrder: Order = {
+                                                id: Date.now(),
+                                                listingId: selectedListing!.id,
+                                                status: 'pending',
+                                                timestamp: new Date().toISOString(),
+                                                screenshot: uploadedScreenshot!,
+                                            };
+                                            const updatedOrders = [...orders, newOrder];
+                                            setOrders(updatedOrders);
+                                            localStorage.setItem("orders", JSON.stringify(updatedOrders));
+                                            saveOrders(updatedOrders);
+                                            window.open(WHATSAPP_PRIVATE_URL, '_blank');
+                                            setPurchasedListing(selectedListing!);
+                                            setShowReviewForm(true);
+                                            setSelectedListing(null);
+                                            setPaymentStep('details');
+                                            setUploadedScreenshot(undefined);
+                                        }}
+                                    >
+                                        Verify Payment (Contact Support)
+                                    </button>
+                                    <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem", marginTop: 16 }}>
+                                        This will open WhatsApp to discuss your payment verification
+                                    </p>
+                                </div>
                             )}
                         </div>
                     </div>

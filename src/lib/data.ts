@@ -48,14 +48,14 @@ async function apiPut(path: string, body: unknown): Promise<boolean> {
 export async function getListings(): Promise<unknown[]> {
   const result = await apiGet("/api/listings");
   if (result.ok && Array.isArray(result.data)) return result.data;
-  const saved = typeof window !== "undefined" ? localStorage.getItem("market_listings") : null;
+  const saved = typeof window !== "undefined" ? localStorage.getItem("market_listings_v2") : null;
   return saved ? JSON.parse(saved) : [];
 }
 
 export async function saveListings(listings: unknown[]): Promise<void> {
   const putOk = await apiPut("/api/listings", listings);
   if (typeof window !== "undefined") {
-    localStorage.setItem("market_listings", JSON.stringify(listings));
+    localStorage.setItem("market_listings_v2", JSON.stringify(listings));
   }
 }
 
