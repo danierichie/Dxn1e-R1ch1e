@@ -1,12 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWhatsapp, faTelegram, faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { ArrowLeft, LayoutGrid } from "lucide-react";
 
 export default function CommunityPage() {
     const router = useRouter();
 
     return (
-        <main style={{ padding: "120px 24px 80px", maxWidth: 1200, margin: "0 auto" }}>
+        <main className="community-page" style={{ padding: "120px 24px 80px", maxWidth: 1200, margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: 40 }}>
                 <h1 className="section-title">
                     Join Our <span style={{ color: "var(--accent)" }}>Elite Community</span>
@@ -16,80 +19,167 @@ export default function CommunityPage() {
                 </p>
             </div>
 
-            <div className="glass-card" style={{ padding: "60px 40px", textAlign: "center", border: "1px solid var(--accent-subtle)" }}>
-                <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 16 }}>
+            <div className="glass-card platform-card" style={{ padding: "60px 40px", textAlign: "center", border: "1px solid var(--accent-subtle)" }}>
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--accent-subtle)] text-[var(--accent)] mb-6">
+                    <LayoutGrid size={24} />
+                </div>
+                <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>
                     Choose Your Platform
                 </h2>
-                <p style={{ color: "var(--text-secondary)", marginBottom: 48, fontSize: "1.1rem" }}>
-                    Join our community on your preferred platform to get exclusive access to new listings and updates.
+                <p style={{ color: "var(--text-secondary)", marginBottom: 40, fontSize: "1.1rem" }}>
+                    Join our community on your preferred platform to get exclusive access to new listings.
                 </p>
 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, maxWidth: 900, margin: "0 auto" }}>
-                    <a href="https://chat.whatsapp.com/JOOjgOlepLyEYteUMAQjYI?mode=gi_c" target="_blank" rel="noopener noreferrer" style={{
-                        display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
-                        background: "linear-gradient(135deg, #25D366, #20B954)", color: "white", padding: "32px 24px", borderRadius: 16,
-                        textDecoration: "none", fontWeight: 700, transition: "transform 0.2s, box-shadow 0.2s",
-                        boxShadow: "0 8px 32px rgba(37, 211, 102, 0.3)"
-                    }} onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(37, 211, 102, 0.4)"; }}
-                       onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(37, 211, 102, 0.3)"; }}>
-                        <span style={{ fontSize: "3rem" }}>📱</span>
-                        <div>
-                            <div style={{ fontSize: "1.3rem", marginBottom: 8 }}>WhatsApp Group</div>
-                            <div style={{ fontSize: "0.9rem", opacity: 0.9 }}>Real-time discussions and instant updates</div>
+                <div className="platform-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20, maxWidth: 1000, margin: "0 auto" }}>
+                    {/* WhatsApp */}
+                    <a href="https://chat.whatsapp.com/JOOjgOlepLyEYteUMAQjYI?mode=gi_c" target="_blank" rel="noopener noreferrer" className="community-btn whatsapp">
+                        <div className="icon-wrapper">
+                            <FontAwesomeIcon icon={faWhatsapp} size="2x" />
+                        </div>
+                        <div className="content">
+                            <span className="platform-name">WhatsApp Hub</span>
+                            <span className="platform-desc">Real-time alerts & community trade intel</span>
                         </div>
                     </a>
 
-                    <a href="https://t.me/dcodmarketplace" target="_blank" rel="noopener noreferrer" style={{
-                        display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
-                        background: "linear-gradient(135deg, #0088cc, #006699)", color: "white", padding: "32px 24px", borderRadius: 16,
-                        textDecoration: "none", fontWeight: 700, transition: "transform 0.2s, box-shadow 0.2s",
-                        boxShadow: "0 8px 32px rgba(0, 136, 204, 0.3)"
-                    }} onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0, 136, 204, 0.4)"; }}
-                       onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(0, 136, 204, 0.3)"; }}>
-                        <span style={{ fontSize: "3rem" }}>✈️</span>
-                        <div>
-                            <div style={{ fontSize: "1.3rem", marginBottom: 8 }}>Telegram Channel</div>
-                            <div style={{ fontSize: "0.9rem", opacity: 0.9 }}>Official announcements and marketplace updates</div>
+                    {/* Telegram */}
+                    <a href="https://t.me/dcodmarketplace" target="_blank" rel="noopener noreferrer" className="community-btn telegram">
+                        <div className="icon-wrapper">
+                            <FontAwesomeIcon icon={faTelegram} size="2x" />
+                        </div>
+                        <div className="content">
+                            <span className="platform-name">Telegram Channel</span>
+                            <span className="platform-desc">Official drops & secure marketplace info</span>
                         </div>
                     </a>
 
-                    <a href="https://discord.com/users/dan1elcodm" target="_blank" rel="noopener noreferrer" style={{
-                        display: "flex", flexDirection: "column", alignItems: "center", gap: 16,
-                        background: "linear-gradient(135deg, #5865F2, #4752C4)", color: "white", padding: "32px 24px", borderRadius: 16,
-                        textDecoration: "none", fontWeight: 700, transition: "transform 0.2s, box-shadow 0.2s",
-                        boxShadow: "0 8px 32px rgba(88, 101, 242, 0.3)"
-                    }} onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(88, 101, 242, 0.4)"; }}
-                       onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(88, 101, 242, 0.3)"; }}>
-                        <span style={{ fontSize: "3rem" }}>💬</span>
-                        <div>
-                            <div style={{ fontSize: "1.3rem", marginBottom: 8 }}>Discord Community</div>
-                            <div style={{ fontSize: "0.9rem", opacity: 0.9 }}>Voice chats, gaming sessions, and community events</div>
+                    {/* Discord */}
+                    <a href="https://discord.com/users/dan1elcodm" target="_blank" rel="noopener noreferrer" className="community-btn discord">
+                        <div className="icon-wrapper">
+                            <FontAwesomeIcon icon={faDiscord} size="2x" />
+                        </div>
+                        <div className="content">
+                            <span className="platform-name">Discord Server</span>
+                            <span className="platform-desc">Voice chats, events & elite networking</span>
                         </div>
                     </a>
                 </div>
 
-                <div style={{ marginTop: 48 }}>
+                <div style={{ marginTop: 40 }}>
                     <button
                         onClick={() => router.back()}
+                        className="btn-outline"
                         style={{
-                            background: "rgba(255,255,255,0.1)",
-                            border: "1px solid var(--border-glass)",
-                            color: "var(--text-primary)",
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 8,
                             padding: "12px 24px",
-                            borderRadius: 8,
-                            cursor: "pointer",
-                            fontWeight: 600
+                            fontSize: "0.95rem"
                         }}
                     >
-                        ← Back to Marketplace
+                        <ArrowLeft size={18} /> Back
                     </button>
                 </div>
             </div>
 
-            <style jsx>{`
-                @media (max-width: 640px) {
-                    .section-title {
-                        font-size: 2.2rem !important;
+            <style jsx global>{`
+                .community-btn {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                    padding: 24px;
+                    border-radius: 20px;
+                    text-decoration: none;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    text-align: left;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .icon-wrapper {
+                    width: 64px;
+                    height: 64px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 16px;
+                    background: rgba(255, 255, 255, 0.1);
+                    backdrop-filter: blur(10px);
+                    flex-shrink: 0;
+                }
+
+                .content {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .platform-name {
+                    font-size: 1.2rem;
+                    font-weight: 800;
+                    color: white;
+                    margin-bottom: 4px;
+                }
+
+                .platform-desc {
+                    font-size: 0.85rem;
+                    color: rgba(255, 255, 255, 0.7);
+                    line-height: 1.4;
+                }
+
+                /* Custom Brand Gradients */
+                .whatsapp {
+                    background: linear-gradient(135deg, rgba(37, 211, 102, 0.15) 0%, rgba(32, 185, 84, 0.05) 100%);
+                    border-color: rgba(37, 211, 102, 0.2);
+                }
+                .whatsapp .icon-wrapper { color: #25D366; background: rgba(37, 211, 102, 0.1); }
+                .whatsapp:hover { background: rgba(37, 211, 102, 0.2); border-color: #25D366; box-shadow: 0 0 30px rgba(37, 211, 102, 0.2); }
+
+                .telegram {
+                    background: linear-gradient(135deg, rgba(0, 136, 204, 0.15) 0%, rgba(0, 102, 153, 0.05) 100%);
+                    border-color: rgba(0, 136, 204, 0.2);
+                }
+                .telegram .icon-wrapper { color: #0088cc; background: rgba(0, 136, 204, 0.1); }
+                .telegram:hover { background: rgba(0, 136, 204, 0.2); border-color: #0088cc; box-shadow: 0 0 30px rgba(0, 136, 204, 0.2); }
+
+                .discord {
+                    background: linear-gradient(135deg, rgba(88, 101, 242, 0.15) 0%, rgba(71, 82, 196, 0.05) 100%);
+                    border-color: rgba(88, 101, 242, 0.2);
+                }
+                .discord .icon-wrapper { color: #5865F2; background: rgba(88, 101, 242, 0.1); }
+                .discord:hover { background: rgba(88, 101, 242, 0.2); border-color: #5865F2; box-shadow: 0 0 30px rgba(88, 101, 242, 0.2); }
+
+                @media (max-width: 768px) {
+                    .platform-card {
+                        padding: 32px 20px !important;
+                        margin: 0 12px;
+                    }
+                    .platform-card h2 {
+                        font-size: 1.5rem !important;
+                    }
+                    .platform-card p {
+                        font-size: 0.95rem !important;
+                        margin-bottom: 32px !important;
+                    }
+                    .community-btn {
+                        padding: 16px;
+                        gap: 16px;
+                        border-radius: 16px;
+                    }
+                    .icon-wrapper {
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 12px;
+                    }
+                    .icon-wrapper :global(svg) {
+                        width: 24px;
+                        height: 24px;
+                    }
+                    .platform-name {
+                        font-size: 1.05rem;
+                    }
+                    .platform-desc {
+                        font-size: 0.75rem;
                     }
                 }
             `}</style>

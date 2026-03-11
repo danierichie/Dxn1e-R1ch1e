@@ -22,6 +22,7 @@ interface Listing {
     rareSkins?: string;
     legendaryVehicles?: number;
     accountLinks?: string;
+    description?: string;
 }
 
 interface Submission {
@@ -60,7 +61,8 @@ export default function AdminPage() {
         legendarySkins: "",
         rareSkins: "",
         legendaryVehicles: "",
-        accountLinks: ""
+        accountLinks: "",
+        description: ""
     });
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const [videoUrlInput, setVideoUrlInput] = useState("");
@@ -166,7 +168,7 @@ export default function AdminPage() {
             addListing(listing);
             setNewListing({
                 title: "", price: "", uid: "", mythicWeapons: "", legendaryWeapons: "",
-                mythicSkins: "", legendarySkins: "", rareSkins: "", legendaryVehicles: "", accountLinks: ""
+                mythicSkins: "", legendarySkins: "", rareSkins: "", legendaryVehicles: "", accountLinks: "", description: ""
             });
             setVideoUrlInput("");
             alert("Listing saved and is live on the marketplace with your video link.");
@@ -181,7 +183,7 @@ export default function AdminPage() {
 
         setNewListing({
             title: "", price: "", uid: "", mythicWeapons: "", legendaryWeapons: "",
-            mythicSkins: "", legendarySkins: "", rareSkins: "", legendaryVehicles: "", accountLinks: ""
+            mythicSkins: "", legendarySkins: "", rareSkins: "", legendaryVehicles: "", accountLinks: "", description: ""
         });
         setVideoFile(null);
         setVideoUrlInput("");
@@ -437,6 +439,15 @@ export default function AdminPage() {
                                 />
                             </div>
                             <div>
+                                <label style={{ display: "block", fontSize: "0.8rem", color: "var(--text-tertiary)", marginBottom: 8 }}>Account Description (Full Details)</label>
+                                <textarea
+                                    value={newListing.description}
+                                    onChange={(e) => setNewListing({ ...newListing, description: e.target.value })}
+                                    style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-glass)", borderRadius: 8, padding: "12px", color: "white", minHeight: 120, userSelect: "text" }}
+                                    placeholder="Paste full account details here..."
+                                ></textarea>
+                            </div>
+                            <div>
                                 <label style={{ display: "block", fontSize: "0.8rem", color: "var(--text-tertiary)", marginBottom: 8 }}>
                                     Video URL <span style={{ color: "var(--accent)", fontWeight: 600 }}>— recommended (instant)</span>
                                 </label>
@@ -652,6 +663,13 @@ export default function AdminPage() {
                     display: grid;
                     grid-template-columns: 1fr 2fr;
                     gap: 32px;
+                }
+                .form-row, .stats-row {
+                   user-select: text !important;
+                }
+                input, textarea {
+                    user-select: text !important;
+                    -webkit-user-select: text !important;
                 }
                 .form-row {
                     display: grid;

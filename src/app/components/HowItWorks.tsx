@@ -1,21 +1,24 @@
+import React from "react";
+import { Search, ShieldCheck, Gamepad2, ClipboardList, DollarSign, CheckCircle, Zap, Gem } from "lucide-react";
+
 const steps = [
     {
         number: "01",
-        icon: "🔍",
+        icon: <Search size={32} />,
         title: "Browse & Choose",
         description:
             "Explore our verified inventory of premium COD:Mobile accounts. Filter by rank, skins, price, and more.",
     },
     {
         number: "02",
-        icon: "🔒",
+        icon: <ShieldCheck size={32} />,
         title: "Secure Checkout",
         description:
             "Pay with confidence using our escrow system. Your funds are held safely until transfer is confirmed.",
     },
     {
         number: "03",
-        icon: "🎮",
+        icon: <Gamepad2 size={32} />,
         title: "Play Instantly",
         description:
             "Receive full account credentials within minutes. Our team verifies every transfer in real-time.",
@@ -25,21 +28,21 @@ const steps = [
 const sellSteps = [
     {
         number: "01",
-        icon: "📝",
+        icon: <ClipboardList size={32} />,
         title: "List Your Account",
         description:
             "Submit your account details with screenshots. Our team reviews and verifies your account information.",
     },
     {
         number: "02",
-        icon: "💰",
+        icon: <DollarSign size={32} />,
         title: "Get Paid Securely",
         description:
             "Once your account sells, funds are held in escrow. We ensure safe transfer before releasing payment.",
     },
     {
         number: "03",
-        icon: "✅",
+        icon: <CheckCircle size={32} />,
         title: "Transfer & Complete",
         description:
             "Hand over account details to the buyer. After verification, receive your payment instantly.",
@@ -57,7 +60,6 @@ export default function HowItWorks() {
                 overflow: "hidden",
             }}
         >
-            {/* Subtle background accent */}
             <div
                 style={{
                     position: "absolute",
@@ -78,9 +80,9 @@ export default function HowItWorks() {
                 <div style={{ textAlign: "center", marginBottom: 72 }}>
                     <div
                         className="neon-tag"
-                        style={{ marginBottom: 20, display: "inline-flex" }}
+                        style={{ marginBottom: 20, display: "inline-flex", alignItems: "center", gap: 8 }}
                     >
-                        ⚡ SIMPLE PROCESS
+                        <Zap size={16} /> SIMPLE PROCESS
                     </div>
                     <h2 className="section-title" style={{ textAlign: "center" }}>
                         How to{" "}
@@ -104,7 +106,6 @@ export default function HowItWorks() {
                     }}
                     className="steps-grid"
                 >
-                    {/* Connecting line (desktop) */}
                     <div
                         className="steps-connector"
                         style={{
@@ -129,7 +130,6 @@ export default function HowItWorks() {
                                 position: "relative",
                             }}
                         >
-                            {/* Step Number */}
                             <div
                                 style={{
                                     position: "absolute",
@@ -139,7 +139,7 @@ export default function HowItWorks() {
                                     fontSize: "0.7rem",
                                     fontWeight: 700,
                                     color: "var(--accent)",
-                                    background: "var(--bg-secondary)",
+                                    background: "var(--bg-primary)",
                                     padding: "4px 12px",
                                     borderRadius: "0 0 8px 8px",
                                     border: "1px solid var(--border-accent)",
@@ -161,8 +161,9 @@ export default function HowItWorks() {
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    fontSize: 28,
+                                    color: "var(--accent)",
                                     margin: "0 auto 24px",
+                                    filter: "drop-shadow(0 0 10px rgba(21, 101, 192, 0.2))"
                                 }}
                             >
                                 {step.icon}
@@ -193,14 +194,13 @@ export default function HowItWorks() {
                 </div>
             </div>
 
-            {/* How to Sell Section */}
             <div style={{ maxWidth: 1200, margin: "120px auto 0", position: "relative" }}>
                 <div style={{ textAlign: "center", marginBottom: 72 }}>
                     <div
                         className="neon-tag"
-                        style={{ marginBottom: 20, display: "inline-flex" }}
+                        style={{ marginBottom: 20, display: "inline-flex", alignItems: "center", gap: 8 }}
                     >
-                        💎 SELL WITH CONFIDENCE
+                        <Gem size={16} /> SELL WITH CONFIDENCE
                     </div>
                     <h2 className="section-title" style={{ textAlign: "center" }}>
                         How to{" "}
@@ -210,7 +210,7 @@ export default function HowItWorks() {
                         className="section-subtitle"
                         style={{ margin: "0 auto", textAlign: "center" }}
                     >
-                        Turn your gaming achievements into cash. Three simple steps to sell your account safely.
+                        Ready to cash out? Here’s how our trade process works.
                     </p>
                 </div>
 
@@ -223,20 +223,6 @@ export default function HowItWorks() {
                     }}
                     className="sell-steps-grid"
                 >
-                    {/* Connecting line (desktop) */}
-                    <div
-                        className="sell-steps-connector"
-                        style={{
-                            position: "absolute",
-                            top: 60,
-                            left: "20%",
-                            right: "20%",
-                            height: 1,
-                            background:
-                                "linear-gradient(90deg, transparent, var(--border-accent), var(--accent-dim), var(--border-accent), transparent)",
-                            pointerEvents: "none",
-                        }}
-                    />
 
                     {sellSteps.map((step, i) => (
                         <div
@@ -248,7 +234,6 @@ export default function HowItWorks() {
                                 position: "relative",
                             }}
                         >
-                            {/* Step Number */}
                             <div
                                 style={{
                                     position: "absolute",
@@ -258,7 +243,7 @@ export default function HowItWorks() {
                                     fontSize: "0.7rem",
                                     fontWeight: 700,
                                     color: "var(--accent)",
-                                    background: "var(--bg-secondary)",
+                                    background: "var(--bg-primary)",
                                     padding: "4px 12px",
                                     borderRadius: "0 0 8px 8px",
                                     border: "1px solid var(--border-accent)",
@@ -280,8 +265,9 @@ export default function HowItWorks() {
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    fontSize: 28,
+                                    color: "var(--accent)",
                                     margin: "0 auto 24px",
+                                    filter: "drop-shadow(0 0 10px rgba(21, 101, 192, 0.2))"
                                 }}
                             >
                                 {step.icon}
@@ -311,6 +297,7 @@ export default function HowItWorks() {
                     ))}
                 </div>
             </div>
+
 
             <style>{`
         @media (max-width: 768px) {

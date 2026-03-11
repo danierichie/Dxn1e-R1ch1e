@@ -12,6 +12,7 @@ import { getListings, getOrders, saveOrders } from "../../lib/data";
 import { useAuth } from "../contexts/AuthContext";
 import { SkeletonCard } from "../components/LoadingComponents";
 import { usePerformanceMonitor } from "../components/PerformanceUtils";
+import { Search, Lock, X, Video, ArrowRight } from "lucide-react";
 
 interface Listing {
     id: number;
@@ -58,7 +59,6 @@ export default function MarketplacePage() {
     const [showAuthPrompt, setShowAuthPrompt] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Performance monitoring
     usePerformanceMonitor('MarketplacePage');
 
     const filteredListings = searchQuery.trim()
@@ -102,7 +102,6 @@ export default function MarketplacePage() {
         return () => { cancelled = true; };
     }, []);
 
-    // Re-sync when another tab (e.g. admin) updates listings, or when user returns to this tab
     useEffect(() => {
         const onStorage = (e: StorageEvent) => {
             if (e.key === "market_listings_v2" && e.newValue) {
@@ -127,44 +126,29 @@ export default function MarketplacePage() {
     }, []);
 
     return (
-        <main style={{ padding: "120px 24px 80px", maxWidth: 1200, margin: "0 auto" }}>
-            <div style={{ marginBottom: 40, textAlign: "center" }}>
+        <main className="pt-28 pb-20 px-6 max-w-[1200px] mx-auto">
+            {/* Page Header */}
+            <div className="mb-10 text-center">
                 <h1 className="section-title">
-                    The <span style={{ color: "var(--accent)" }}>Marketplace</span>
+                    The <span className="text-[var(--accent)]">Marketplace</span>
                 </h1>
-                <p className="section-subtitle" style={{ margin: "0 auto" }}>
+                <p className="section-subtitle mx-auto">
                     Browse our full inventory of verified high-tier accounts.
                 </p>
             </div>
 
             {/* User Welcome Banner */}
             {user && (
-                <div className="glass-card" style={{
-                    padding: "20px",
-                    marginBottom: 32,
-                    background: "linear-gradient(135deg, rgba(21, 101, 192, 0.1), rgba(21, 101, 192, 0.05))",
-                    border: "1px solid var(--accent-subtle)"
-                }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                        <div style={{
-                            width: "40px",
-                            height: "40px",
-                            borderRadius: "50%",
-                            background: "var(--accent)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: "white",
-                            fontSize: "1rem",
-                            fontWeight: "bold"
-                        }}>
+                <div className="glass-card p-5 mb-8 bg-gradient-to-br from-[rgba(21,101,192,0.1)] to-[rgba(21,101,192,0.05)] border border-[var(--accent-subtle)]">
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-[var(--accent)] flex items-center justify-center text-white text-sm font-bold">
                             {user.fullName.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                            <div style={{ fontSize: "1rem", fontWeight: 600, color: "var(--text-primary)" }}>
+                            <div className="text-base font-semibold text-[var(--text-primary)]">
                                 Welcome back, {user.fullName}!
                             </div>
-                            <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                            <div className="text-sm text-[var(--text-secondary)]">
                                 Ready to find your next elite account?
                             </div>
                         </div>
@@ -173,107 +157,94 @@ export default function MarketplacePage() {
             )}
 
             {/* Search */}
-            <div className="glass-card" style={{ padding: 20, marginBottom: 32 }}>
-                <label htmlFor="marketplace-search" style={{ display: "block", fontSize: "0.8rem", color: "var(--text-tertiary)", marginBottom: 8 }}>Search by title</label>
+            <div className="glass-card p-5 mb-8">
+                <label htmlFor="marketplace-search" className="block text-xs text-[var(--text-tertiary)] mb-2">
+                    Search by title
+                </label>
                 <input
                     id="marketplace-search"
                     type="search"
                     placeholder="e.g. Legendary, Mythic, Ghost..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    style={{
-                        width: "100%",
-                        padding: "12px 16px",
-                        background: "rgba(255,255,255,0.05)",
-                        border: "1px solid var(--border-glass)",
-                        borderRadius: 8,
-                        color: "var(--text-primary)",
-                        fontSize: "1rem"
-                    }}
+                    className="w-full px-4 py-3 bg-white/5 border border-[var(--border-glass)] rounded-lg text-[var(--text-primary)] text-base placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--accent)] transition-colors"
                 />
             </div>
 
-            {/* Results - sorted lowest to highest price */}
+            {/* Results */}
             {isLoading ? (
-                <div className="listings-grid" style={{ display: "grid", gap: 24 }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {Array.from({ length: 6 }, (_, i) => (
                         <SkeletonCard key={i} />
                     ))}
                 </div>
             ) : filteredListings.length === 0 ? (
-                <div style={{ textAlign: "center", padding: "100px 0" }}>
-                    <div style={{ fontSize: "3rem", marginBottom: 20 }}>🔍</div>
-                    <h3 style={{ fontSize: "1.2rem", marginBottom: 8 }}>{searchQuery.trim() ? "No accounts match your search" : "No accounts found"}</h3>
-                    <p style={{ color: "var(--text-tertiary)" }}>{searchQuery.trim() ? "Try a different search term." : "Check back later for new listings."}</p>
+                <div className="text-center py-24">
+                    <div className="flex justify-center mb-5">
+                        <Search size={48} className="text-[var(--text-tertiary)]" />
+                    </div>
+                    <h3 className="text-lg mb-2">{searchQuery.trim() ? "No accounts match your search" : "No accounts found"}</h3>
+                    <p className="text-[var(--text-tertiary)]">{searchQuery.trim() ? "Try a different search term." : "Check back later for new listings."}</p>
                 </div>
             ) : (
-                <div className="listings-grid" style={{ display: "grid", gap: 24 }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredListings.map((listing) => (
                         <div
                             key={listing.id}
-                            className="glass-card"
-                            style={{ padding: 0, overflow: "hidden" }}
+                            className="glass-card overflow-hidden"
                         >
-                            <div style={{ height: 4, background: `linear-gradient(90deg, ${listing.rankColor || "var(--accent)"}, transparent)` }} />
-                            <div style={{ padding: "24px 28px" }}>
-                                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
+                            <div className="h-1" style={{ background: `linear-gradient(90deg, ${listing.rankColor || "var(--accent)"}, transparent)` }} />
+                            <div className="p-5">
+                                <div className="flex justify-between mb-4">
                                     <div>
                                         {listing.tag && (
-                                            <span style={{ display: "inline-block", padding: "4px 8px", borderRadius: 4, background: "var(--accent-subtle)", color: "var(--accent)", fontSize: "0.65rem", fontWeight: 700, marginBottom: 8 }}>
+                                            <span className="inline-block px-2 py-1 rounded bg-[var(--accent-subtle)] text-[var(--accent)] text-[0.65rem] font-bold mb-2">
                                                 {listing.tag}
                                             </span>
                                         )}
-                                        <h3 style={{ fontSize: "1.05rem", fontWeight: 700 }}>{listing.title}</h3>
+                                        <h3 className="text-base font-bold">{listing.title}</h3>
                                     </div>
-                                    <div style={{ textAlign: "right" }}>
-                                        <div style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--accent)" }}>
+                                    <div className="text-right">
+                                        <div className="text-lg font-extrabold text-[var(--accent)]">
                                             {formatDualPrice(listing.price)}
                                         </div>
-                                        <div style={{ fontSize: "0.65rem", color: "var(--text-tertiary)" }}>NGN / USD</div>
+                                        <div className="text-[0.65rem] text-[var(--text-tertiary)]">NGN / USD</div>
                                     </div>
                                 </div>
 
-                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 20px", padding: "12px 0", borderTop: "1px solid var(--border-glass)", borderBottom: "1px solid var(--border-glass)", marginBottom: 20 }}>
+                                <div className="grid grid-cols-2 gap-x-5 gap-y-2.5 py-3 border-y border-[var(--border-glass)] mb-5">
                                     <div>
-                                        <span style={{ display: "block", fontSize: "0.6rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 2 }}>Mythic Weps</span>
-                                        <span style={{ fontSize: "0.85rem", fontWeight: 700 }}>{listing.mythicWeapons || 0}</span>
+                                        <span className="block text-[0.6rem] text-[var(--text-tertiary)] uppercase mb-0.5">Mythic Weps</span>
+                                        <span className="text-sm font-bold">{listing.mythicWeapons || 0}</span>
                                     </div>
                                     <div>
-                                        <span style={{ display: "block", fontSize: "0.6rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 2 }}>Legendary Weps</span>
-                                        <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--accent)" }}>{listing.legendaryWeapons || 0}</span>
+                                        <span className="block text-[0.6rem] text-[var(--text-tertiary)] uppercase mb-0.5">Legendary Weps</span>
+                                        <span className="text-sm font-bold text-[var(--accent)]">{listing.legendaryWeapons || 0}</span>
                                     </div>
                                     <div>
-                                        <span style={{ display: "block", fontSize: "0.6rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 2 }}>Mythic Skins</span>
-                                        <span style={{ fontSize: "0.85rem", fontWeight: 700 }}>{listing.mythicSkins || 0}</span>
+                                        <span className="block text-[0.6rem] text-[var(--text-tertiary)] uppercase mb-0.5">Mythic Skins</span>
+                                        <span className="text-sm font-bold">{listing.mythicSkins || 0}</span>
                                     </div>
                                     <div>
-                                        <span style={{ display: "block", fontSize: "0.6rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 2 }}>Legendary Skins</span>
-                                        <span style={{ fontSize: "0.85rem", fontWeight: 700 }}>{listing.legendarySkins || 0}</span>
+                                        <span className="block text-[0.6rem] text-[var(--text-tertiary)] uppercase mb-0.5">Legendary Skins</span>
+                                        <span className="text-sm font-bold">{listing.legendarySkins || 0}</span>
                                     </div>
                                 </div>
 
                                 {user ? (
                                     <button
-                                        className="btn-primary"
-                                        style={{ width: "100%", padding: "12px" }}
+                                        className="btn-primary w-full py-3 flex items-center justify-center gap-2"
                                         onClick={() => setSelectedListing(listing)}
                                     >
-                                        View Details →
+                                        View Details <ArrowRight size={16} />
                                     </button>
                                 ) : (
                                     <button
-                                        className="btn-primary"
-                                        style={{
-                                            width: "100%",
-                                            padding: "12px",
-                                            background: "var(--accent-dim)",
-                                            cursor: "pointer",
-                                            position: "relative"
-                                        }}
+                                        className="btn-primary w-full py-3 !bg-[var(--accent-dim)] cursor-pointer relative flex items-center justify-center gap-2"
                                         onClick={() => setShowAuthPrompt(true)}
                                         title="Sign in required to purchase"
                                     >
-                                        🔒 Sign In Required
+                                        <Lock size={16} /> Sign In Required
                                     </button>
                                 )}
                             </div>
@@ -281,66 +252,25 @@ export default function MarketplacePage() {
                     ))}
                 </div>
             )}
+
             {/* Detail Modal */}
             {selectedListing && (
-                <div style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    background: "rgba(0,0,0,0.9)",
-                    backdropFilter: "blur(10px)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    zIndex: 1000,
-                    padding: 24
-                }}>
-                    <div className="glass-card" style={{
-                        maxWidth: 900,
-                        width: "100%",
-                        maxHeight: "90vh",
-                        overflowY: "auto",
-                        position: "relative",
-                        padding: 0,
-                        border: "1px solid var(--accent-subtle)"
-                    }}>
+                <div className="fixed inset-0 bg-black/90 backdrop-blur-lg flex items-center justify-center z-[1000] p-6">
+                    <div className="glass-card max-w-[900px] w-full max-h-[90vh] overflow-y-auto relative border border-[var(--accent-subtle)]">
                         <button
                             onClick={() => {
                                 setSelectedListing(null);
                                 setPaymentStep('details');
                                 setUploadedScreenshot(undefined);
                             }}
-                            style={{
-                                position: "absolute",
-                                top: 20,
-                                right: 20,
-                                background: "rgba(0,0,0,0.5)",
-                                border: "none",
-                                color: "white",
-                                width: 40,
-                                height: 40,
-                                borderRadius: 20,
-                                cursor: "pointer",
-                                zIndex: 10,
-                                fontSize: "1.5rem"
-                            }}
+                            className="absolute top-4 right-4 bg-black/50 border-none text-white w-10 h-10 rounded-full cursor-pointer z-10 flex items-center justify-center hover:bg-black/70 transition-colors"
                         >
-                            ×
+                            <X size={24} />
                         </button>
 
-                        <div style={{ display: "flex", flexDirection: "column" }}>
+                        <div className="flex flex-col">
                             {/* Video Section */}
-                            <div style={{
-                                background: "#000",
-                                position: "relative",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                width: "100%",
-                                aspectRatio: "16 / 9"
-                            }}>
+                            <div className="bg-black relative flex items-center justify-center w-full aspect-video">
                                 {selectedListing.videoUrl ? (
                                     selectedListing.videoUrl.includes("youtube.com") ||
                                         selectedListing.videoUrl.includes("youtu.be") ||
@@ -350,7 +280,7 @@ export default function MarketplacePage() {
                                                 .replace("watch?v=", "embed/")
                                                 .replace("vimeo.com/", "player.vimeo.com/video/")
                                             }
-                                            style={{ width: "100%", height: "100%", border: "none" }}
+                                            className="w-full h-full border-none"
                                             allow="autoplay; encrypted-media; picture-in-picture"
                                             allowFullScreen
                                         />
@@ -362,125 +292,129 @@ export default function MarketplacePage() {
                                             muted
                                             playsInline
                                             loop
-                                            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                                            className="w-full h-full object-contain"
                                         />
                                     )
                                 ) : (
-                                    <div style={{ textAlign: "center", padding: 40 }}>
-                                        <div style={{ fontSize: "3rem", marginBottom: 16 }}>🎬</div>
-                                        <p style={{ color: "var(--text-tertiary)" }}>No video preview available for this legacy listing.</p>
+                                    <div className="text-center p-10">
+                                        <div className="flex justify-center mb-4">
+                                            <Video size={48} className="text-[var(--text-tertiary)]" />
+                                        </div>
+                                        <p className="text-[var(--text-tertiary)]">No video preview available for this legacy listing.</p>
                                     </div>
                                 )}
                             </div>
 
                             {/* Details Section */}
                             {paymentStep === 'details' && (
-                                <div style={{ padding: "32px 24px" }}>
-                                    <div style={{ marginBottom: 32 }}>
-                                        <div style={{ color: "var(--accent)", fontWeight: 700, fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: 2, marginBottom: 8 }}>
+                                <div className="p-6 md:p-8">
+                                    <div className="mb-6">
+                                        <div className="text-[var(--accent)] font-bold text-xs uppercase tracking-widest mb-2">
                                             Verified Account
                                         </div>
-                                        <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>{selectedListing.title}</h2>
-                                        <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                                            <span style={{ fontSize: "2rem", fontWeight: 800, color: "var(--accent)" }}>
+                                        <h2 className="text-2xl md:text-3xl font-extrabold mb-3">{selectedListing.title}</h2>
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-2xl md:text-3xl font-extrabold text-[var(--accent)]">
                                                 {formatDualPrice(selectedListing.price)}
                                             </span>
-                                            <span style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>one-time payment</span>
+                                            <span className="text-[var(--text-tertiary)] text-sm">one-time payment</span>
                                         </div>
                                     </div>
 
-                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px 32px", marginBottom: 40 }}>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4 mb-8">
                                         {[
                                             { label: "Mythic Weapons", value: selectedListing.mythicWeapons || 0 },
-                                            { label: "Legendary Weapons", value: selectedListing.legendaryWeapons || 0, color: "var(--accent)" },
+                                            { label: "Legendary Weapons", value: selectedListing.legendaryWeapons || 0, color: "text-[var(--accent)]" },
                                             { label: "Mythic Skins", value: selectedListing.mythicSkins || 0 },
                                             { label: "Legendary Skins", value: selectedListing.legendarySkins || 0 },
                                             { label: "Legendary Vehicles", value: selectedListing.legendaryVehicles || 0 }
                                         ].map((stat, i) => (
                                             <div key={i}>
-                                                <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 4 }}>{stat.label}</div>
-                                                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: stat.color || "white" }}>{stat.value}</div>
+                                                <div className="text-[0.7rem] text-[var(--text-tertiary)] uppercase mb-1">{stat.label}</div>
+                                                <div className={`text-lg font-bold ${stat.color || 'text-white'}`}>{stat.value}</div>
                                             </div>
                                         ))}
                                     </div>
 
-                                    <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
+                                    <div className="border-t border-[var(--border-glass)] pt-6 mb-8 flex flex-col gap-5">
                                         {selectedListing.rareSkins && (
                                             <div>
-                                                <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>OG / Rare Skins</div>
-                                                <div style={{ fontSize: "0.95rem", color: "white", lineHeight: 1.6, background: "rgba(21, 101, 192, 0.08)", padding: 16, borderRadius: 12, border: "1px solid rgba(21, 101, 192, 0.2)" }}>{selectedListing.rareSkins}</div>
+                                                <div className="text-[0.7rem] text-[var(--text-tertiary)] uppercase mb-2">OG / Rare Skins</div>
+                                                <div className="text-sm text-white leading-relaxed bg-[rgba(21,101,192,0.08)] p-4 rounded-xl border border-[rgba(21,101,192,0.2)]">
+                                                    {selectedListing.rareSkins}
+                                                </div>
                                             </div>
                                         )}
-                                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                                        <div className="grid grid-cols-2 gap-5">
                                             <div>
-                                                <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Account UID</div>
-                                                <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontFamily: "monospace", wordBreak: "break-all" }}>{selectedListing.uid || "N/A"}</div>
+                                                <div className="text-[0.7rem] text-[var(--text-tertiary)] uppercase mb-2">Account UID</div>
+                                                <div className="text-sm text-[var(--text-secondary)] font-mono break-all">{selectedListing.uid || "N/A"}</div>
                                             </div>
                                             <div>
-                                                <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Linked To</div>
-                                                <div style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>{selectedListing.accountLinks || "Activision"}</div>
+                                                <div className="text-[0.7rem] text-[var(--text-tertiary)] uppercase mb-2">Linked To</div>
+                                                <div className="text-sm text-[var(--text-secondary)]">{selectedListing.accountLinks || "Activision"}</div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <button className="btn-primary" style={{ width: "100%", padding: "16px", fontSize: "1rem" }} onClick={() => setPaymentStep('bank')}>
+                                    <button className="btn-primary w-full py-4 text-base" onClick={() => setPaymentStep('bank')}>
                                         Buy This Account
                                     </button>
-                                    <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem", marginTop: 16 }}>
+                                    <p className="text-center text-[var(--text-tertiary)] text-xs mt-4">
                                         Secured via Escrow Protection
                                     </p>
                                 </div>
                             )}
 
-                            {/* Bank Details Section */}
+                            {/* Bank Details */}
                             {paymentStep === 'bank' && (
-                                <div style={{ padding: "32px 24px" }}>
-                                    <div style={{ marginBottom: 32 }}>
-                                        <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>Payment Details</h2>
-                                        <p style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>Transfer the exact amount to the following account details in NGN.</p>
+                                <div className="p-6 md:p-8">
+                                    <div className="mb-6">
+                                        <h2 className="text-2xl md:text-3xl font-extrabold mb-3">Payment Details</h2>
+                                        <p className="text-[var(--text-tertiary)] text-sm">Transfer the exact amount to the following account details in NGN.</p>
                                     </div>
 
-                                    <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
+                                    <div className="border-t border-[var(--border-glass)] pt-6 mb-8 flex flex-col gap-5">
                                         <div>
-                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Bank Name</div>
-                                            <div style={{ fontSize: "1.1rem", fontWeight: 700 }}>MONIEPOINT MFB</div>
+                                            <div className="text-[0.7rem] text-[var(--text-tertiary)] uppercase mb-2">Bank Name</div>
+                                            <div className="text-lg font-bold">MONIEPOINT MFB</div>
                                         </div>
                                         <div>
-                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Account Number</div>
-                                            <div style={{ fontSize: "1.1rem", fontWeight: 700, fontFamily: "monospace" }}>6852143015</div>
+                                            <div className="text-[0.7rem] text-[var(--text-tertiary)] uppercase mb-2">Account Number</div>
+                                            <div className="text-lg font-bold font-mono">6852143015</div>
                                         </div>
                                         <div>
-                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Account Name</div>
-                                            <div style={{ fontSize: "1.1rem", fontWeight: 700 }}>D-CODE MARKETPLACELIMITED</div>
+                                            <div className="text-[0.7rem] text-[var(--text-tertiary)] uppercase mb-2">Account Name</div>
+                                            <div className="text-lg font-bold">D-CODE MARKETPLACELIMITED</div>
                                         </div>
                                         <div>
-                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Amount</div>
-                                            <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--accent)" }}>
+                                            <div className="text-[0.7rem] text-[var(--text-tertiary)] uppercase mb-2">Amount</div>
+                                            <div className="text-lg font-bold text-[var(--accent)]">
                                                 {formatDualPrice(selectedListing.price)}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <button className="btn-primary" style={{ width: "100%", padding: "16px", fontSize: "1rem" }} onClick={() => setPaymentStep('upload')}>
+                                    <button className="btn-primary w-full py-4 text-base" onClick={() => setPaymentStep('upload')}>
                                         I Have Paid - Upload Screenshot
                                     </button>
-                                    <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem", marginTop: 16 }}>
+                                    <p className="text-center text-[var(--text-tertiary)] text-xs mt-4">
                                         Make sure to include the transaction reference in the screenshot
                                     </p>
                                 </div>
                             )}
 
-                            {/* Upload Screenshot Section */}
+                            {/* Upload Screenshot */}
                             {paymentStep === 'upload' && (
-                                <div style={{ padding: "32px 24px" }}>
-                                    <div style={{ marginBottom: 32 }}>
-                                        <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>Upload Payment Screenshot</h2>
-                                        <p style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>Please upload a clear screenshot of your payment confirmation showing the transaction details.</p>
+                                <div className="p-6 md:p-8">
+                                    <div className="mb-6">
+                                        <h2 className="text-2xl md:text-3xl font-extrabold mb-3">Upload Payment Screenshot</h2>
+                                        <p className="text-[var(--text-tertiary)] text-sm">Please upload a clear screenshot of your payment confirmation showing the transaction details.</p>
                                     </div>
 
-                                    <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
+                                    <div className="border-t border-[var(--border-glass)] pt-6 mb-8 flex flex-col gap-5">
                                         <div>
-                                            <label style={{ display: "block", fontSize: "0.9rem", fontWeight: 700, marginBottom: 8 }}>Select Screenshot</label>
+                                            <label className="block text-sm font-bold mb-2">Select Screenshot</label>
                                             <input
                                                 type="file"
                                                 accept="image/*"
@@ -495,47 +429,39 @@ export default function MarketplacePage() {
                                                         reader.readAsDataURL(file);
                                                     }
                                                 }}
-                                                style={{
-                                                    width: "100%",
-                                                    padding: "12px",
-                                                    border: "1px solid var(--border-glass)",
-                                                    borderRadius: 8,
-                                                    background: "rgba(255,255,255,0.05)",
-                                                    color: "white"
-                                                }}
+                                                className="w-full p-3 border border-[var(--border-glass)] rounded-lg bg-white/5 text-white"
                                             />
                                         </div>
                                     </div>
 
-                                    <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem" }}>
+                                    <p className="text-center text-[var(--text-tertiary)] text-xs">
                                         Supported formats: JPG, PNG, GIF. Max size: 5MB
                                     </p>
                                 </div>
                             )}
 
-                            {/* Verify Payment Section */}
+                            {/* Verify Payment */}
                             {paymentStep === 'verify' && (
-                                <div style={{ padding: "32px 24px" }}>
-                                    <div style={{ marginBottom: 32 }}>
-                                        <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 12 }}>Review Payment Screenshot</h2>
-                                        <p style={{ color: "var(--text-tertiary)", fontSize: "0.9rem" }}>Please review the uploaded screenshot. If everything looks correct, click verify to contact support.</p>
+                                <div className="p-6 md:p-8">
+                                    <div className="mb-6">
+                                        <h2 className="text-2xl md:text-3xl font-extrabold mb-3">Review Payment Screenshot</h2>
+                                        <p className="text-[var(--text-tertiary)] text-sm">Please review the uploaded screenshot. If everything looks correct, click verify to contact support.</p>
                                     </div>
 
-                                    <div style={{ borderTop: "1px solid var(--border-glass)", paddingTop: 32, marginBottom: 40, display: "flex", flexDirection: "column", gap: 24 }}>
+                                    <div className="border-t border-[var(--border-glass)] pt-6 mb-8 flex flex-col gap-5">
                                         <div>
-                                            <div style={{ fontSize: "0.7rem", color: "var(--text-tertiary)", textTransform: "uppercase", marginBottom: 8 }}>Uploaded Screenshot</div>
+                                            <div className="text-[0.7rem] text-[var(--text-tertiary)] uppercase mb-2">Uploaded Screenshot</div>
                                             {/* eslint-disable-next-line @next/next/no-img-element -- user-uploaded data URL */}
                                             <img
                                                 src={uploadedScreenshot}
                                                 alt="Payment Screenshot"
-                                                style={{ width: "100%", maxHeight: 400, objectFit: "contain", borderRadius: 8, border: "1px solid var(--border-glass)" }}
+                                                className="w-full max-h-[400px] object-contain rounded-lg border border-[var(--border-glass)]"
                                             />
                                         </div>
                                     </div>
 
                                     <button
-                                        className="btn-primary"
-                                        style={{ width: "100%", padding: "16px", fontSize: "1rem" }}
+                                        className="btn-primary w-full py-4 text-base"
                                         onClick={() => {
                                             const newOrder: Order = {
                                                 id: Date.now(),
@@ -558,7 +484,7 @@ export default function MarketplacePage() {
                                     >
                                         Verify Payment (Contact Support)
                                     </button>
-                                    <p style={{ textAlign: "center", color: "var(--text-tertiary)", fontSize: "0.8rem", marginTop: 16 }}>
+                                    <p className="text-center text-[var(--text-tertiary)] text-xs mt-4">
                                         This will open WhatsApp to discuss your payment verification
                                     </p>
                                 </div>
@@ -571,25 +497,6 @@ export default function MarketplacePage() {
             <ReviewSystem />
 
             <CommunitySection />
-
-            <style>{`
-                .listings-grid {
-                    grid-template-columns: repeat(3, 1fr) !important;
-                }
-                @media (max-width: 1024px) {
-                    .listings-grid {
-                        grid-template-columns: repeat(2, 1fr) !important;
-                    }
-                }
-                @media (max-width: 640px) {
-                    .listings-grid {
-                        grid-template-columns: 1fr !important;
-                    }
-                                        .section-title {
-                        font-size: 2.2rem !important;
-                    }
-                }
-            `}</style>
 
             {/* Review Form */}
             {showReviewForm && purchasedListing && (

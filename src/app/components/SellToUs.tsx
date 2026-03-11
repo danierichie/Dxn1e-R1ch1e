@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { WHATSAPP_PRIVATE_URL } from "../../lib/utils";
 import { addSubmission } from "../../lib/data";
+import { Zap, DollarSign, Award, Palette, Swords, Gem, Rocket, ClipboardCheck, MessageCircle } from "lucide-react";
 
 const steps = [
     {
         number: "01",
-        icon: "⚡",
+        icon: <Zap size={32} />,
         title: "Fast Appraisal",
         description:
             "Submit your UID and screenshots. We'll verify your assets and send a competitive offer within 24 hours.",
@@ -16,22 +17,22 @@ const steps = [
 
 const whatWeBuy = [
     {
-        icon: "🏆",
+        icon: <Award size={24} />,
         title: "Legendary & Mythic Accounts",
         description: "High-rank accounts with rare skins and exclusive items",
     },
     {
-        icon: "🎨",
+        icon: <Palette size={24} />,
         title: "Rare Skin Collections",
         description: "Accounts with OG season skins, battle pass exclusives, and limited drops",
     },
     {
-        icon: "⚔️",
+        icon: <Swords size={24} />,
         title: "Competitive Ranked Accounts",
         description: "Master and above ranked accounts with strong K/D stats",
     },
     {
-        icon: "💎",
+        icon: <Gem size={24} />,
         title: "Blueprint Collections",
         description: "Accounts loaded with rare weapon blueprints and camos like Damascus",
     },
@@ -86,7 +87,6 @@ export default function SellToUs() {
                 overflow: "hidden",
             }}
         >
-            {/* Background effect */}
             <div
                 style={{
                     position: "absolute",
@@ -103,13 +103,12 @@ export default function SellToUs() {
             />
 
             <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
-                {/* Header */}
-                <div style={{ textAlign: "center", marginBottom: 80 }}>
+                <div style={{ textAlign: "center", marginBottom: 60 }}>
                     <div
                         className="neon-tag"
-                        style={{ marginBottom: 20, display: "inline-flex" }}
+                        style={{ marginBottom: 20, display: "inline-flex", alignItems: "center", gap: 8 }}
                     >
-                        💸 SELL YOUR ACCOUNT
+                        <Zap size={16} /> FAST APPRAISAL
                     </div>
                     <h1
                         className="section-title"
@@ -120,102 +119,29 @@ export default function SellToUs() {
                     </h1>
                     <p
                         className="section-subtitle"
-                        style={{ margin: "0 auto", textAlign: "center", maxWidth: 620 }}
+                        style={{ margin: "0 auto", textAlign: "center", maxWidth: 700 }}
                     >
-                        Got a stacked Call of Duty: Mobile account? We buy premium accounts at
-                        competitive prices. Fast payments, zero hassle.
+                        Got a stacked account? Submit your UID below for a fast appraisal. 
+                        We verify assets and send competitive offers within 24 hours — 
+                        secure payments, zero hassle.
                     </p>
                 </div>
 
-                {/* How Selling Works */}
-                <div style={{ marginBottom: 60, display: "flex", justifyContent: "center" }}>
-                    {steps.map((step, i) => (
-                        <div
-                            key={step.number}
-                            className={`glass-card reveal reveal-delay-${i + 1}`}
-                            style={{
-                                padding: "40px 32px",
-                                textAlign: "center",
-                                position: "relative",
-                                maxWidth: 440,
-                                width: "100%"
-                            }}
-                        >
-                            <div
-                                style={{
-                                    position: "absolute",
-                                    top: -1,
-                                    right: 24,
-                                    fontFamily: "var(--font-mono, monospace)",
-                                    fontSize: "0.7rem",
-                                    fontWeight: 700,
-                                    color: "var(--accent)",
-                                    background: "var(--bg-primary)",
-                                    padding: "4px 12px",
-                                    borderRadius: "0 0 8px 8px",
-                                    border: "1px solid var(--border-accent)",
-                                    borderTop: "none",
-                                    letterSpacing: "0.08em",
-                                }}
-                            >
-                                HOW IT WORKS
-                            </div>
-
-                            <div
-                                style={{
-                                    width: 72,
-                                    height: 72,
-                                    borderRadius: 20,
-                                    background: "var(--accent-subtle)",
-                                    border: "1px solid var(--border-accent)",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontSize: 28,
-                                    margin: "0 auto 24px",
-                                }}
-                            >
-                                {step.icon}
-                            </div>
-
-                            <h3
-                                style={{
-                                    fontSize: "1.2rem",
-                                    fontWeight: 700,
-                                    marginBottom: 12,
-                                    letterSpacing: "-0.01em",
-                                }}
-                            >
-                                {step.title}
-                            </h3>
-
-                            <p
-                                style={{
-                                    color: "var(--text-secondary)",
-                                    fontSize: "0.9rem",
-                                    lineHeight: 1.7,
-                                }}
-                            >
-                                {step.description}
-                            </p>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Submission Form */}
                 <div style={{ maxWidth: 800, margin: "0 auto 100px" }}>
-                    <div className="glass-card" style={{ padding: 48 }}>
+                    <div className="glass-card ready-to-sell-container" style={{ padding: 48 }}>
                         {submitted ? (
                             <div style={{ textAlign: "center", padding: "40px 0" }}>
-                                <div style={{ fontSize: "3rem", marginBottom: 20 }}>🚀</div>
+                                <div style={{ color: "var(--accent)", marginBottom: 20, display: "flex", justifyContent: "center" }}>
+                                    <Rocket size={60} />
+                                </div>
                                 <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: 16 }}>Submission Received!</h2>
-                                <p style={{ color: "var(--text-secondary)", marginBottom: 24 }}>Our team will review your account details and contact you within 24 hours.</p>
+                                <p style={{ color: "var(--text-secondary)", marginBottom: 24 }}>We'll take a look at the account and get back to you within 24 hours.</p>
                                 <button onClick={() => setSubmitted(false)} className="btn-outline">Submit Another Account</button>
                             </div>
                         ) : (
                             <>
                                 <h2 style={{ fontSize: "1.8rem", fontWeight: 800, marginBottom: 12, textAlign: "center" }}>Ready to Sell?</h2>
-                                <p style={{ textAlign: "center", color: "var(--text-secondary)", marginBottom: 40 }}>Fill out the details below to get a free appraisal.</p>
+                                <p style={{ textAlign: "center", color: "var(--text-secondary)", marginBottom: 40 }}>Enter your details below for a quick appraisal.</p>
 
                                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                                     <div>
@@ -225,12 +151,12 @@ export default function SellToUs() {
                                             required
                                             value={whatsappNumber}
                                             onChange={(e) => setWhatsappNumber(e.target.value)}
-                                            style={{ width: "100%", padding: 16, borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-glass)", color: "white" }}
+                                            style={{ width: "100%", padding: 16, borderRadius: 12, background: "var(--bg-glass)", border: "1px solid var(--border-glass)", color: "var(--text-primary)" }}
                                             placeholder="+234..."
                                         />
                                     </div>
 
-                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+                                    <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
                                         <div>
                                             <label style={{ display: "block", marginBottom: 10, fontSize: "0.9rem", color: "var(--text-secondary)" }}>Account UID</label>
                                             <input
@@ -238,7 +164,7 @@ export default function SellToUs() {
                                                 required
                                                 value={accountUID}
                                                 onChange={(e) => setAccountUID(e.target.value)}
-                                                style={{ width: "100%", padding: 16, borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-glass)", color: "white" }}
+                                                style={{ width: "100%", padding: 16, borderRadius: 12, background: "var(--bg-glass)", border: "1px solid var(--border-glass)", color: "var(--text-primary)" }}
                                                 placeholder="672..."
                                             />
                                         </div>
@@ -249,7 +175,7 @@ export default function SellToUs() {
                                                 required
                                                 value={ign}
                                                 onChange={(e) => setIgn(e.target.value)}
-                                                style={{ width: "100%", padding: 16, borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-glass)", color: "white" }}
+                                                style={{ width: "100%", padding: 16, borderRadius: 12, background: "var(--bg-glass)", border: "1px solid var(--border-glass)", color: "var(--text-primary)" }}
                                                 placeholder="Pro_Player"
                                             />
                                         </div>
@@ -257,15 +183,15 @@ export default function SellToUs() {
 
                                     <div>
                                         <label style={{ display: "block", marginBottom: 12, fontSize: "0.9rem", color: "var(--text-secondary)" }}>Linked To (Select all that apply)</label>
-                                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12 }}>
-                                            {["Apple", "Facebook", "Activision", "Google", "Line", "Guest/Gamecentre"].map(link => (
-                                                <label key={link} style={{
+                                        <div className="links-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12 }}>
+                                            {["Apple", "Facebook", "Activision", "Google", "Line", "Guest/GC"].map(link => (
+                                                <label key={link} className="link-label" style={{
                                                     display: "flex",
                                                     alignItems: "center",
                                                     gap: 10,
                                                     padding: "12px 16px",
                                                     borderRadius: 10,
-                                                    background: accountLinks.includes(link) ? "rgba(21, 101, 192, 0.15)" : "rgba(255,255,255,0.03)",
+                                                    background: accountLinks.includes(link) ? "var(--accent-subtle)" : "var(--bg-glass)",
                                                     border: accountLinks.includes(link) ? "1px solid var(--accent)" : "1px solid var(--border-glass)",
                                                     cursor: "pointer",
                                                     fontSize: "0.85rem",
@@ -293,7 +219,7 @@ export default function SellToUs() {
                                             multiple
                                             accept="image/*"
                                             onChange={(e) => setSettingsFile(e.target.files?.[0] || null)}
-                                            style={{ width: "100%", padding: 16, borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-glass)", color: "white" }}
+                                            style={{ width: "100%", padding: 16, borderRadius: 12, background: "var(--bg-glass)", border: "1px solid var(--border-glass)", color: "var(--text-primary)" }}
                                         />
                                     </div>
 
@@ -303,17 +229,17 @@ export default function SellToUs() {
                                             required
                                             value={details}
                                             onChange={(e) => setDetails(e.target.value)}
-                                            style={{ width: "100%", padding: 16, borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid var(--border-glass)", color: "white", minHeight: 120 }}
+                                            style={{ width: "100%", padding: 16, borderRadius: 12, background: "var(--bg-glass)", border: "1px solid var(--border-glass)", color: "var(--text-primary)", minHeight: 120 }}
                                             placeholder="Tell us more about the skins, blueprints, or achievements..."
                                         ></textarea>
                                     </div>
                                     <button
                                         type="submit"
-                                        className="btn-primary"
+                                        className="btn-primary submit-btn"
                                         disabled={submitting}
-                                        style={{ padding: "18px", fontSize: "1rem" }}
+                                        style={{ padding: "18px", fontSize: "1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}
                                     >
-                                        {submitting ? "Processing..." : "📋 Submit Your Account"}
+                                        {submitting ? "Processing..." : <><ClipboardCheck size={20} /> Submit Your Account</>}
                                     </button>
                                 </form>
 
@@ -325,7 +251,7 @@ export default function SellToUs() {
                                         href={WHATSAPP_PRIVATE_URL}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="btn-outline"
+                                        className="btn-outline whatsapp-btn"
                                         style={{
                                             display: "inline-flex",
                                             alignItems: "center",
@@ -336,7 +262,7 @@ export default function SellToUs() {
                                             fontSize: "0.95rem"
                                         }}
                                     >
-                                        <span style={{ fontSize: "1.2rem" }}>💬</span>
+                                        <MessageCircle size={20} />
                                         Chat with us directly for quick trade
                                     </a>
                                 </div>
@@ -345,7 +271,6 @@ export default function SellToUs() {
                     </div>
                 </div>
 
-                {/* What We Buy */}
                 <div>
                     <h2
                         style={{
@@ -388,7 +313,7 @@ export default function SellToUs() {
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        fontSize: 24,
+                                        color: "var(--accent)",
                                         flexShrink: 0,
                                     }}
                                 >
@@ -424,6 +349,46 @@ export default function SellToUs() {
                 @media (max-width: 768px) {
                     .sell-buy-grid {
                         grid-template-columns: 1fr !important;
+                    }
+                    .ready-to-sell-container {
+                        padding: 16px !important;
+                        margin-bottom: 30px !important;
+                        border-radius: 12px !important;
+                    }
+                    .links-grid {
+                        grid-template-columns: repeat(3, 1fr) !important;
+                        gap: 4px !important;
+                    }
+                    .link-label {
+                        padding: 4px 6px !important;
+                        font-size: 0.55rem !important;
+                        gap: 4px !important;
+                        min-height: 28px !important;
+                        justify-content: center !important;
+                    }
+                    .link-label input {
+                        width: 10px !important;
+                        height: 10px !important;
+                    }
+                    .submit-btn {
+                        padding: 12px !important;
+                        font-size: 0.85rem !important;
+                    }
+                    .whatsapp-btn {
+                        padding: 8px 16px !important;
+                        font-size: 0.8rem !important;
+                        width: 100% !important;
+                        justify-content: center !important;
+                    }
+                    .form-grid {
+                        grid-template-columns: 1fr !important;
+                        gap: 12px !important;
+                    }
+                    h1.section-title {
+                        font-size: 1.8rem !important;
+                    }
+                    .section-subtitle {
+                        font-size: 0.9rem !important;
                     }
                 }
             `}</style>

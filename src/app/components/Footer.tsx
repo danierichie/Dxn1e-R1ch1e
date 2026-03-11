@@ -1,116 +1,46 @@
 "use client";
 
-import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXTwitter, faWhatsapp, faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { WHATSAPP_PRIVATE_URL } from "../../lib/utils";
 
 const footerLinks = {
-    Support: ["Help Center", "Contact Us", "Dispute Resolution", "Trust & Safety"],
+    Support: ["Help Center", "Contact Us"],
 };
 
 export default function Footer() {
     return (
-        <footer
-            style={{
-                borderTop: "1px solid var(--border-glass)",
-                background: "var(--bg-primary)",
-            }}
-        >
-            <div
-                style={{
-                    maxWidth: 1200,
-                    margin: "0 auto",
-                    padding: "64px 24px 32px",
-                }}
-            >
-                <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "2fr 1fr",
-                        gap: 48,
-                    }}
-                    className="footer-grid"
-                >
+        <footer className="border-t border-[var(--border-glass)] bg-[var(--bg-primary)]">
+            <div className="max-w-[1200px] mx-auto pt-16 pb-8 px-6">
+                <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-12">
                     {/* Brand Column */}
                     <div>
-                        <div
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 10,
-                                marginBottom: 20,
-                            }}
-                        >
-                            <div
-                                style={{
-                                    width: 32,
-                                    height: 32,
-                                    borderRadius: 8,
-                                    background:
-                                        "linear-gradient(135deg, var(--accent), rgba(21, 101, 192, 0.7))",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    fontWeight: 900,
-                                    fontSize: 14,
-                                    color: "#0D0D0D",
-                                }}
-                            >
+                        <div className="flex items-center gap-2.5 mb-5">
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--accent)] to-[rgba(21,101,192,0.7)] flex items-center justify-center font-black text-sm text-[#0D0D0D]">
                                 DM
                             </div>
-                            <span
-                                style={{
-                                    fontWeight: 800,
-                                    fontSize: "1.05rem",
-                                    letterSpacing: "-0.02em",
-                                }}
-                            >
-                                D-COD <span style={{ color: "var(--accent)" }}>MARKETPLACE</span>
+                            <span className="font-extrabold text-base tracking-tight">
+                                D-COD <span className="text-[var(--accent)]">MARKETPLACE</span>
                             </span>
                         </div>
-                        <p
-                            style={{
-                                color: "var(--text-secondary)",
-                                fontSize: "0.9rem",
-                                lineHeight: 1.7,
-                                maxWidth: 300,
-                                marginBottom: 24,
-                            }}
-                        >
+                        <p className="text-[var(--text-secondary)] text-sm leading-relaxed max-w-[300px] mb-6">
                             The premier marketplace for verified Call of Duty: Mobile accounts.
                             Secured by escrow. Trusted by thousands.
                         </p>
-                        <div style={{ display: "flex", gap: 12 }}>
+                        <div className="flex gap-3">
                             {[
-                                { icon: "𝕏", color: "#000000", bg: "#ffffff", href: "#" },
-                                { icon: "📱", color: "#ffffff", bg: "#25D366", href: "https://chat.whatsapp.com/JOOjgOlepLyEYteUMAQjYI?mode=gi_c" },
-                                { icon: "💬", color: "#ffffff", bg: "#5865F2", href: "#" }
+                                { icon: faXTwitter, color: "#ffffff", bg: "#000000", href: "https://x.com/Dan1elcodm" },
+                                { icon: faWhatsapp, color: "#ffffff", bg: "#25D366", href: WHATSAPP_PRIVATE_URL },
+                                { icon: faDiscord, color: "#ffffff", bg: "#5865F2", href: "https://discord.com/users/dan1elcodm" }
                             ].map((social, i) => (
                                 <a
                                     key={i}
                                     href={social.href}
                                     {...(social.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                                    style={{
-                                        width: 40,
-                                        height: 40,
-                                        borderRadius: 10,
-                                        background: social.bg,
-                                        color: social.color,
-                                        border: "none",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        fontSize: 18,
-                                        textDecoration: "none",
-                                        transition: "transform 0.2s",
-                                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)"
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.transform = "translateY(-2px)";
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.transform = "translateY(0)";
-                                    }}
+                                    className="w-10 h-10 rounded-lg flex items-center justify-center text-lg no-underline shadow-md hover:-translate-y-0.5 transition-transform duration-200"
+                                    style={{ background: social.bg, color: social.color }}
                                 >
-                                    {social.icon}
+                                    <FontAwesomeIcon icon={social.icon} />
                                 </a>
                             ))}
                         </div>
@@ -119,41 +49,19 @@ export default function Footer() {
                     {/* Link Columns */}
                     {Object.entries(footerLinks).map(([category, links]) => (
                         <div key={category}>
-                            <h4
-                                style={{
-                                    fontSize: "0.8rem",
-                                    fontWeight: 700,
-                                    textTransform: "uppercase",
-                                    letterSpacing: "0.08em",
-                                    color: "var(--text-primary)",
-                                    marginBottom: 20,
-                                }}
-                            >
+                            <h4 className="text-xs font-bold uppercase tracking-widest text-[var(--text-primary)] mb-5">
                                 {category}
                             </h4>
-                            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                            <ul className="list-none p-0 m-0 space-y-3">
                                 {links.map((link) => {
                                     const href =
                                         category === "Support" && link === "Contact Us" ? "/contact" :
-                                        category === "Support" && link === "Help Center" ? "/contact" :
-                                        category === "Support" && link === "Dispute Resolution" ? "/contact" :
-                                        category === "Support" && link === "Trust & Safety" ? "/how-it-works" : "#";
+                                            category === "Support" && link === "Help Center" ? "/contact" : "#";
                                     return (
-                                        <li key={link} style={{ marginBottom: 12 }}>
+                                        <li key={link}>
                                             <a
                                                 href={href}
-                                                style={{
-                                                    color: "var(--text-tertiary)",
-                                                    textDecoration: "none",
-                                                    fontSize: "0.88rem",
-                                                    transition: "color 0.2s",
-                                                }}
-                                                onMouseEnter={(e) =>
-                                                    (e.currentTarget.style.color = "var(--accent)")
-                                                }
-                                                onMouseLeave={(e) =>
-                                                    (e.currentTarget.style.color = "var(--text-tertiary)")
-                                                }
+                                                className="text-[var(--text-tertiary)] no-underline text-sm hover:text-[var(--accent)] transition-colors duration-200"
                                             >
                                                 {link}
                                             </a>
@@ -166,41 +74,17 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div
-                    style={{
-                        marginTop: 48,
-                        paddingTop: 24,
-                        borderTop: "1px solid var(--border-glass)",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        flexWrap: "wrap",
-                        gap: 16,
-                    }}
-                >
-                    <p
-                        style={{
-                            fontSize: "0.8rem",
-                            color: "var(--text-tertiary)",
-                        }}
-                    >
+                <div className="mt-12 pt-6 border-t border-[var(--border-glass)] flex justify-between items-center flex-wrap gap-4">
+                    <p className="text-xs text-[var(--text-tertiary)]">
                         © 2026 D-COD MARKETPLACE. All rights reserved.
                     </p>
-                    <div style={{ display: "flex", gap: 24 }}>
-                        <a href="/privacy" style={{ fontSize: "0.8rem", color: "var(--text-tertiary)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-secondary)")} onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-tertiary)")}>Privacy Policy</a>
-                        <a href="/terms" style={{ fontSize: "0.8rem", color: "var(--text-tertiary)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-secondary)")} onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-tertiary)")}>Terms of Service</a>
-                        <a href="/cookie-policy" style={{ fontSize: "0.8rem", color: "var(--text-tertiary)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-secondary)")} onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-tertiary)")}>Cookie Policy</a>
+                    <div className="flex gap-6">
+                        <a href="/privacy" className="text-xs text-[var(--text-tertiary)] no-underline hover:text-[var(--text-secondary)] transition-colors duration-200">Privacy Policy</a>
+                        <a href="/terms" className="text-xs text-[var(--text-tertiary)] no-underline hover:text-[var(--text-secondary)] transition-colors duration-200">Terms of Service</a>
+                        <a href="/cookie-policy" className="text-xs text-[var(--text-tertiary)] no-underline hover:text-[var(--text-secondary)] transition-colors duration-200">Cookie Policy</a>
                     </div>
                 </div>
             </div>
-
-            <style>{`
-        @media (max-width: 768px) {
-          .footer-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
         </footer>
     );
 }

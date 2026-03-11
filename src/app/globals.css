@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ── Cyber-Industrial Design System ── */
+/* Main theme variables */
 
 /* Dark Theme (Default) */
 :root {
@@ -42,14 +42,14 @@
   --accent-subtle: rgba(21, 101, 192, 0.08);
 
   --text-primary: #1A1A1A;
-  --text-secondary: #666666;
-  --text-tertiary: #999999;
+  --text-secondary: #4A4A4A;
+  --text-tertiary: #757575;
 
   --border-glass: rgba(0, 0, 0, 0.08);
   --border-accent: rgba(21, 101, 192, 0.2);
 }
 
-@theme inline {
+@theme {
   --color-background: var(--bg-primary);
   --color-foreground: var(--text-primary);
   --color-accent: var(--accent);
@@ -58,7 +58,7 @@
   --font-mono: var(--font-jetbrains-mono);
 }
 
-/* ── Base ── */
+
 
 * {
   box-sizing: border-box;
@@ -82,43 +82,103 @@ body {
   color: var(--bg-primary);
 }
 
-/* ── Keyframes ── */
+/* Ensure inputs are always selectable and pastable */
+input,
+textarea,
+[contenteditable] {
+  -webkit-user-select: text !important;
+  -khtml-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+::placeholder {
+  color: var(--text-tertiary);
+  opacity: 1;
+}
+
+[data-theme="light"] ::placeholder {
+  color: #888888;
+}
+
+
 
 @keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 @keyframes glow-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes scan-line {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100vh);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* ── Loading spinner ── */
+
 .loading-spinner {
   width: 48px;
   height: 48px;
@@ -128,7 +188,7 @@ body {
   animation: spin 0.8s linear infinite;
 }
 
-/* ── Gradient Top Bar ── */
+
 
 .gradient-bar {
   position: fixed;
@@ -142,7 +202,7 @@ body {
   z-index: 100;
 }
 
-/* ── Glass Card ── */
+
 
 .glass-card {
   background: var(--bg-glass);
@@ -163,7 +223,7 @@ body {
     0 0 60px var(--accent-subtle);
 }
 
-/* ── Buttons ── */
+
 
 .btn-primary {
   display: inline-flex;
@@ -232,7 +292,7 @@ body {
   box-shadow: 0 0 30px var(--accent-subtle);
 }
 
-/* ── Section Styles ── */
+
 
 .section {
   padding: 100px 24px;
@@ -254,7 +314,7 @@ body {
   max-width: 600px;
 }
 
-/* ── Neon Tag ── */
+
 
 .neon-tag {
   display: inline-flex;
@@ -271,7 +331,7 @@ body {
   letter-spacing: 0.08em;
 }
 
-/* ── Scrollbar ── */
+
 
 ::-webkit-scrollbar {
   width: 6px;
@@ -290,168 +350,165 @@ body {
   background: var(--accent-dim);
 }
 
-/* ── Mobile Optimizations ── */
 
-/* ── Mobile Touch Optimizations ── */
+
+
 
 @media (max-width: 768px) {
-  /* Prevent text selection on touch */
-  * {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  
-  /* Allow text selection in input fields */
-  input, textarea, [contenteditable] {
-    -webkit-user-select: text;
-    -khtml-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
-  }
-  
+
+  /* Better scrolling behavior */
+
   /* Better scrolling behavior */
   html {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
   }
-  
+
   body {
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
   }
-  
+
   /* Touch-friendly tap targets */
   .btn-primary,
   .btn-outline {
-    padding: 16px 24px;
-    font-size: 1rem;
-    min-height: 48px;
-    min-width: 48px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    min-height: 40px;
+    min-width: 40px;
     touch-action: manipulation;
   }
-  
+
   /* Interactive elements should be at least 44px */
-  button, a, input, select, textarea, [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
+  button,
+  a,
+  input,
+  select,
+  textarea,
+  [role="button"] {
+    min-height: 40px;
+    min-width: 40px;
   }
-  
+
   /* Mobile glass cards */
   .glass-card {
     border-radius: var(--radius-md);
     margin: 8px;
     touch-action: manipulation;
   }
-  
+
   /* Mobile sections */
   .section {
-    padding: 60px 16px;
+    padding: 40px 16px;
   }
-  
+
   /* Mobile typography */
   .section-title {
-    font-size: clamp(1.5rem, 6vw, 2rem);
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
   }
-  
+
   .section-subtitle {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
   }
-  
+
   /* Touch-friendly spacing */
   .contact-grid {
     grid-template-columns: 1fr !important;
-    gap: 16px !important;
+    gap: 12px !important;
   }
-  
+
   .listings-grid {
     grid-template-columns: 1fr !important;
-    gap: 16px !important;
+    gap: 12px !important;
   }
-  
+
   /* Mobile navigation */
   nav {
     padding: 12px 16px !important;
   }
-  
+
   /* Mobile modals */
   .glass-card[style*="position: fixed"] {
     margin: 16px !important;
     max-height: calc(100vh - 32px) !important;
   }
-  
+
   /* Better mobile scrolling */
   .scroll-container {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
-  
+
   /* Mobile form elements */
-  input, textarea, select {
-    font-size: 16px; /* Prevents zoom on iOS */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+    /* Prevents zoom on iOS */
     min-height: 44px;
   }
 }
 
 @media (max-width: 480px) {
+
   /* Small mobile optimizations */
   .section {
-    padding: 40px 12px;
+    padding: 24px 12px;
   }
-  
+
   .glass-card {
-    margin: 4px;
-    padding: 16px !important;
+    margin: 2px;
+    padding: 10px !important;
+    border-radius: var(--radius-md);
   }
-  
+
   /* Mobile buttons */
   .btn-primary,
   .btn-outline {
-    padding: 14px 20px;
-    font-size: 0.95rem;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    min-height: 36px;
   }
 }
 
-/* ── Touch Gestures ── */
+
 @media (hover: none) and (pointer: coarse) {
   .glass-card:hover {
     transform: none;
   }
-  
+
   .btn-primary:hover,
   .btn-outline:hover {
     transform: none;
   }
-  
+
   /* Active states for touch */
   .btn-primary:active,
   .btn-outline:active {
     transform: scale(0.98);
   }
-  
+
   .glass-card:active {
     transform: scale(0.99);
   }
 }
 
-/* ── Safe Area for Notched Phones ── */
+
 @supports (padding: max(0px)) {
   .mobile-safe-padding {
     padding-left: max(16px, env(safe-area-inset-left));
     padding-right: max(16px, env(safe-area-inset-right));
   }
-  
+
   .mobile-safe-bottom {
     padding-bottom: max(16px, env(safe-area-inset-bottom));
   }
 }
 
-/* ── Performance Optimizations ── */
+
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -461,26 +518,43 @@ body {
   }
 }
 
-/* ── High Contrast Mode ── */
+
 @media (prefers-contrast: high) {
   .glass-card {
     border: 2px solid var(--accent);
   }
-  
+
   .btn-primary {
     border: 2px solid var(--bg-primary);
   }
 }
 
-/* ── Reveal Animation ── */
+
 
 .reveal {
   animation: slide-up 0.7s ease forwards;
 }
 
-.reveal-delay-1 { animation-delay: 0.1s; }
-.reveal-delay-2 { animation-delay: 0.2s; }
-.reveal-delay-3 { animation-delay: 0.3s; }
-.reveal-delay-4 { animation-delay: 0.4s; }
-.reveal-delay-5 { animation-delay: 0.5s; }
-.reveal-delay-6 { animation-delay: 0.6s; }
+.reveal-delay-1 {
+  animation-delay: 0.1s;
+}
+
+.reveal-delay-2 {
+  animation-delay: 0.2s;
+}
+
+.reveal-delay-3 {
+  animation-delay: 0.3s;
+}
+
+.reveal-delay-4 {
+  animation-delay: 0.4s;
+}
+
+.reveal-delay-5 {
+  animation-delay: 0.5s;
+}
+
+.reveal-delay-6 {
+  animation-delay: 0.6s;
+}

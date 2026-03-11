@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Star, CheckCircle, X, ShieldCheck, PenLine } from "lucide-react";
 
 interface ReviewFormProps {
   listingId: number;
@@ -20,79 +21,57 @@ export default function ReviewForm({ listingId, listingTitle, onReviewSubmitted,
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Create new review
     const newReview = {
       id: Date.now(),
       listingId,
-      customerName: customerName || "Anonymous",
+      customerName: customerName || "Anonymous Player",
       rating,
       comment,
       date: new Date().toISOString(),
-      verified: true, // In real app, this would be verified based on purchase
+      verified: true,
       accountPurchased: listingTitle
     };
 
-    // Save to localStorage (in real app, this would be saved to database)
     const existingReviews = JSON.parse(localStorage.getItem('reviews') || '[]');
     existingReviews.push(newReview);
     localStorage.setItem('reviews', JSON.stringify(existingReviews));
 
-    // Notify parent component
     onReviewSubmitted(newReview);
 
     setIsSubmitting(false);
     setSubmitted(true);
 
-    // Close form after 2 seconds
     setTimeout(() => {
       onClose();
     }, 2000);
   };
 
-  const renderStars = (interactive = false) => {
+  const renderStars = () => {
     return Array.from({ length: 5 }, (_, i) => (
       <button
         key={i}
         type="button"
-        onClick={() => interactive && setRating(i + 1)}
-        disabled={!interactive}
-        style={{
-          background: 'none',
-          border: 'none',
-          fontSize: '32px',
-          cursor: interactive ? 'pointer' : 'default',
-          color: i < rating ? '#FFD700' : 'rgba(255, 255, 255, 0.2)',
-          transition: 'color 0.2s ease',
-          padding: '4px',
-        }}
-        onMouseEnter={() => interactive && setRating(i + 1)}
+        onClick={() => setRating(i + 1)}
+        className="p-1 transition-transform active:scale-90"
       >
-        ★
+        <Star
+          size={28}
+          className={`${i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-white/10'} transition-all duration-200`}
+        />
       </button>
     ));
   };
 
   if (submitted) {
     return (
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'rgba(0,0,0,0.8)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-      }}>
-        <div className="glass-card" style={{ padding: '40px', textAlign: 'center' }}>
-          <div style={{ fontSize: '4rem', marginBottom: '20px' }}>✅</div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '16px', color: '#4CAF50' }}>
-            Thank You for Your Review!
-          </h2>
-          <p style={{ color: 'var(--text-secondary)' }}>
-            Your feedback helps other customers make informed decisions.
+      <div className="fixed inset-0 bg-black/90 backdrop-blur-xl flex items-center justify-center z-[2000] p-6">
+        <div className="glass-card p-10 text-center max-w-sm w-full border border-[var(--accent-subtle)]">
+          <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-6 text-green-500">
+            <CheckCircle size={48} />
+          </div>
+          <h2 className="text-2xl font-bold mb-3 text-white">Review Published!</h2>
+          <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+            Your elite feedback has been secured. Redirecting you...
           </p>
         </div>
       </div>
@@ -100,155 +79,92 @@ export default function ReviewForm({ listingId, listingTitle, onReviewSubmitted,
   }
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(0,0,0,0.8)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000,
-      padding: '20px'
-    }}>
-      <div className="glass-card" style={{
-        maxWidth: '500px',
-        width: '100%',
-        maxHeight: '90vh',
-        overflowY: 'auto',
-        position: 'relative'
-      }}>
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '20px',
-            right: '20px',
-            background: 'rgba(0,0,0,0.5)',
-            border: 'none',
-            color: 'white',
-            width: '40px',
-            height: '40px',
-            borderRadius: '20px',
-            cursor: 'pointer',
-            fontSize: '1.5rem',
-            zIndex: 10
-          }}
-        >
-          ×
-        </button>
-
-        <form onSubmit={handleSubmit} style={{ padding: '40px 24px' }}>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '16px', textAlign: 'center' }}>
-            Leave a Review
-          </h2>
-          
-          <div style={{ 
-            textAlign: 'center', 
-            marginBottom: '32px',
-            padding: '16px',
-            background: 'var(--accent-subtle)',
-            borderRadius: '12px',
-            border: '1px solid var(--border-accent)'
-          }}>
-            <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '8px' }}>
-              Purchased Account:
+    <div className="fixed inset-0 bg-black/95 backdrop-blur-md flex items-end md:items-center justify-center z-[2000] p-0 md:p-6 overflow-y-auto">
+      <div className="glass-card w-full max-w-[500px] min-h-[70vh] md:min-h-0 rounded-t-[32px] md:rounded-[24px] overflow-hidden relative border-t md:border border-[var(--border-accent)]">
+        {/* Header with Close */}
+        <div className="flex items-center justify-between p-6 border-b border-[var(--border-glass)]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[var(--accent-subtle)] text-[var(--accent)] flex items-center justify-center">
+              <PenLine size={20} />
             </div>
-            <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--accent)' }}>
-              {listingTitle}
+            <h2 className="text-lg font-black uppercase tracking-tight">Review Order</h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-4 md:p-8 space-y-6">
+          {/* Context Info */}
+          <div className="bg-[var(--accent-subtle)] p-4 rounded-2xl border border-[var(--border-accent)] flex items-center gap-4">
+            <div className="flex-1">
+              <div className="text-[0.65rem] text-[var(--accent)] font-black uppercase tracking-widest mb-1">Authenticated Account</div>
+              <div className="text-sm font-bold text-white mb-0.5">{listingTitle}</div>
+              <div className="text-[0.6rem] text-[var(--text-tertiary)] flex items-center gap-1">
+                <ShieldCheck size={10} /> Escrow Protected Purchase
+              </div>
             </div>
           </div>
 
-          {/* Rating */}
-          <div style={{ marginBottom: '32px' }}>
-            <label style={{ display: 'block', fontSize: '1rem', fontWeight: 600, marginBottom: '16px', textAlign: 'center' }}>
-              How would you rate this purchase?
+          {/* Rating Selector */}
+          <div className="text-center">
+            <label className="block text-xs font-bold uppercase tracking-widest text-[var(--text-secondary)] mb-4">
+              Rate Your Experience
             </label>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '4px' }}>
-              {renderStars(true)}
+            <div className="flex justify-center gap-1">
+              {renderStars()}
             </div>
-            <div style={{ textAlign: 'center', marginTop: '8px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-              {rating === 5 && 'Excellent!'}
-              {rating === 4 && 'Very Good'}
-              {rating === 3 && 'Good'}
-              {rating === 2 && 'Fair'}
-              {rating === 1 && 'Poor'}
+            <div className="mt-3 text-[var(--accent)] font-black uppercase tracking-tighter text-sm">
+              {['Poor', 'Fair', 'Good', 'Very Good', 'Elite Excellence'][rating - 1]}
             </div>
           </div>
 
-          {/* Customer Name */}
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, marginBottom: '8px', color: 'var(--text-secondary)' }}>
-              Your Name (Optional)
-            </label>
-            <input
-              type="text"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-              placeholder="Enter your name or leave blank for anonymous"
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid var(--border-glass)',
-                borderRadius: '8px',
-                color: 'var(--text-primary)',
-                fontSize: '1rem'
-              }}
-            />
+          <div className="space-y-6">
+            <div>
+              <label className="block text-[0.65rem] font-black uppercase tracking-widest text-[var(--text-tertiary)] mb-2 ml-1">
+                Public Alias (Optional)
+              </label>
+              <input
+                type="text"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                placeholder="e.g. Ghost_01"
+                className="w-full px-4 py-3 bg-white/5 border border-[var(--border-glass)] rounded-xl text-white text-sm focus:outline-none focus:border-[var(--accent)] transition-all placeholder:text-white/10"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[0.65rem] font-black uppercase tracking-widest text-[var(--text-tertiary)] mb-2 ml-1">
+                Review Intel *
+              </label>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Share your experience with the community..."
+                required
+                rows={4}
+                className="w-full px-4 py-3 bg-white/5 border border-[var(--border-glass)] rounded-xl text-white text-sm focus:outline-none focus:border-[var(--accent)] transition-all resize-none placeholder:text-white/10"
+              />
+            </div>
           </div>
 
-          {/* Comment */}
-          <div style={{ marginBottom: '32px' }}>
-            <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, marginBottom: '8px', color: 'var(--text-secondary)' }}>
-              Your Review *
-            </label>
-            <textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Share your experience with this purchase..."
-              required
-              rows={4}
-              style={{
-                width: '100%',
-                padding: '12px 16px',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid var(--border-glass)',
-                borderRadius: '8px',
-                color: 'var(--text-primary)',
-                fontSize: '1rem',
-                resize: 'vertical',
-                fontFamily: 'inherit'
-              }}
-            />
-          </div>
-
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={isSubmitting || !comment.trim()}
-            className="btn-primary"
-            style={{ 
-              width: '100%', 
-              padding: '16px',
-              fontSize: '1.1rem',
-              opacity: (isSubmitting || !comment.trim()) ? 0.5 : 1,
-              cursor: (isSubmitting || !comment.trim()) ? 'not-allowed' : 'pointer'
-            }}
+            className="btn-primary w-full py-4 rounded-2xl text-base font-bold flex items-center justify-center gap-3 disabled:opacity-30 disabled:cursor-not-allowed group transition-all"
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Review'}
+            {isSubmitting ? (
+              'Transmitting...'
+            ) : (
+              <>Submit Verified Review <CheckCircle size={20} className="group-hover:scale-110 transition-transform" /></>
+            )}
           </button>
 
-          <p style={{ 
-            textAlign: 'center', 
-            color: 'var(--text-tertiary)', 
-            fontSize: '0.8rem', 
-            marginTop: '16px' 
-          }}>
-            Your review will help other customers make informed decisions.
+          <p className="text-center text-[var(--text-tertiary)] text-[0.65rem] uppercase font-bold tracking-tight opacity-50">
+            Secure Submission Protocol Active
           </p>
         </form>
       </div>

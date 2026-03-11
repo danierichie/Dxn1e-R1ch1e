@@ -2,193 +2,82 @@
 
 import Link from "next/link";
 import { useAuth } from "../contexts/AuthContext";
+import { Target, Lock } from "lucide-react";
 
 export default function Hero() {
     const { user } = useAuth();
     return (
         <section
             id="hero"
-            style={{
-                position: "relative",
-                minHeight: "100vh",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden",
-                padding: "120px 24px 80px",
-            }}
+            className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 pb-20 px-6"
         >
-            {/* Background Effects */}
             <div
+                className="absolute inset-0 pointer-events-none"
                 style={{
-                    position: "absolute",
-                    inset: 0,
-                    background:
-                        "radial-gradient(ellipse 80% 60% at 50% 20%, rgba(21, 101, 192, 0.08) 0%, transparent 60%)",
-                    pointerEvents: "none",
+                    background: "radial-gradient(ellipse 80% 60% at 50% 20%, rgba(21, 101, 192, 0.08) 0%, transparent 60%)"
                 }}
             />
             <div
+                className="absolute top-[15%] right-[10%] w-[400px] h-[400px] rounded-full pointer-events-none blur-[60px] animate-[glow-pulse_6s_ease-in-out_infinite]"
                 style={{
-                    position: "absolute",
-                    top: "15%",
-                    right: "10%",
-                    width: 400,
-                    height: 400,
-                    borderRadius: "50%",
-                    background:
-                        "radial-gradient(circle, rgba(21, 101, 192, 0.06) 0%, transparent 70%)",
-                    filter: "blur(60px)",
-                    pointerEvents: "none",
-                    animation: "glow-pulse 6s ease-in-out infinite",
+                    background: "radial-gradient(circle, rgba(21, 101, 192, 0.06) 0%, transparent 70%)"
                 }}
             />
             <div
+                className="absolute bottom-[20%] left-[5%] w-[300px] h-[300px] rounded-full pointer-events-none blur-[80px] animate-[glow-pulse_8s_ease-in-out_infinite_2s]"
                 style={{
-                    position: "absolute",
-                    bottom: "20%",
-                    left: "5%",
-                    width: 300,
-                    height: 300,
-                    borderRadius: "50%",
-                    background:
-                        "radial-gradient(circle, rgba(21, 101, 192, 0.05) 0%, transparent 70%)",
-                    filter: "blur(80px)",
-                    pointerEvents: "none",
-                    animation: "glow-pulse 8s ease-in-out infinite 2s",
+                    background: "radial-gradient(circle, rgba(21, 101, 192, 0.05) 0%, transparent 70%)"
                 }}
             />
 
-            {/* Grid overlay */}
             <div
+                className="absolute inset-0 pointer-events-none"
                 style={{
-                    position: "absolute",
-                    inset: 0,
-                    backgroundImage:
-                        "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
-                    backgroundSize: "60px 60px",
-                    pointerEvents: "none",
+                    backgroundImage: "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
+                    backgroundSize: "60px 60px"
                 }}
             />
 
-            {/* Content */}
-            <div
-                className="reveal"
-                style={{
-                    position: "relative",
-                    zIndex: 1,
-                    textAlign: "center",
-                    maxWidth: 820,
-                }}
-            >
-                {/* Welcome line */}
-                <p
-                    style={{
-                        fontSize: "clamp(1rem, 2vw, 1.15rem)",
-                        fontWeight: 600,
-                        color: "var(--text-secondary)",
-                        letterSpacing: "0.2em",
-                        textTransform: "uppercase",
-                        marginBottom: 0,
-                    }}
-                >
-                    Welcome to
-                </p>
-
-                <h1
-                    style={{
-                        fontSize: "clamp(2.8rem, 7vw, 5rem)",
-                        fontWeight: 900,
-                        letterSpacing: "-0.04em",
-                        lineHeight: 1.05,
-                        marginBottom: 8,
-                    }}
-                >
+            <div className="reveal relative z-10 text-center max-w-[820px]">
+                <h1 className="text-[clamp(2.8rem,7vw,5rem)] font-black tracking-tighter leading-none mb-2">
                     D-COD
                     <br />
-                    <span
-                        style={{
-                            background:
-                                "linear-gradient(90deg, var(--accent), rgba(21, 101, 192, 0.7))",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            backgroundClip: "text",
-                        }}
-                    >
+                    <span className="bg-gradient-to-r from-[var(--accent)] to-[rgba(21,101,192,0.7)] bg-clip-text text-transparent">
                         Marketplace
                     </span>
                 </h1>
 
-                <div
-                    className="neon-tag"
-                    style={{ marginBottom: 24, display: "inline-flex" }}
-                >
-                    <span
-                        style={{
-                            width: 6,
-                            height: 6,
-                            borderRadius: "50%",
-                            background: "var(--accent)",
-                            boxShadow: "0 0 8px var(--accent)",
-                            display: "inline-block",
-                        }}
-                    />
+                <div className="neon-tag inline-flex mb-6">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)] inline-block" />
                     Secure • Verified • Live Now
                 </div>
 
-                <p
-                    style={{
-                        color: "var(--text-secondary)",
-                        fontSize: "clamp(1rem, 2vw, 1.25rem)",
-                        lineHeight: 1.7,
-                        maxWidth: 580,
-                        margin: "0 auto 40px",
-                    }}
-                >
-                    The premier marketplace for verified Call of Duty: Mobile accounts.
-                    Legendary skins, max-rank profiles, and rare blueprints — all secured
+                <p className="text-[var(--text-secondary)] text-[clamp(1rem,2vw,1.25rem)] leading-relaxed max-w-[580px] mx-auto mb-10">
+                    A secure place to pick up legendary CODM accounts. Hand-verified profiles,
+                    rare weapon blueprints, and mythic skins — all handled safely
                     with escrow protection.
                 </p>
 
-                {/* Additional message for non-authenticated users */}
                 {!user && (
-                    <p
-                        style={{
-                            fontSize: "clamp(0.9rem, 1.5vw, 1.05rem)",
-                            color: "var(--accent)",
-                            marginBottom: 40,
-                            lineHeight: 1.6,
-                            maxWidth: 600,
-                            margin: "0 auto 40px",
-                            fontWeight: 500,
-                        }}
-                    >
+                    <p className="text-[clamp(0.9rem,1.5vw,1.05rem)] text-[var(--accent)] leading-relaxed max-w-[600px] mx-auto mb-10 font-medium">
                         Login or sign up to browse the full marketplace and start selling your accounts
                     </p>
                 )}
 
-                {/* CTAs */}
-                <div
-                    style={{
-                        display: "flex",
-                        gap: 16,
-                        justifyContent: "center",
-                        flexWrap: "wrap",
-                    }}
-                >
+                <div className="flex gap-4 justify-center flex-wrap">
                     {user ? (
                         <>
-                            <Link href="/marketplace" className="btn-primary">
-                                <span>🎯</span> See Available Accounts
+                            <Link href="/marketplace" className="btn-primary flex items-center gap-2">
+                                <Target size={18} /> See Available Accounts
                             </Link>
                             <Link href="/how-it-works" className="btn-outline">
-                                How It Works
+                                How to Buy/Sell
                             </Link>
                         </>
                     ) : (
                         <>
-                            <Link href="/login" className="btn-primary">
-                                <span>🔐</span> Login
+                            <Link href="/login" className="btn-primary flex items-center gap-2">
+                                <Lock size={18} /> Login
                             </Link>
                             <Link href="/signup" className="btn-outline">
                                 Sign Up
@@ -197,49 +86,23 @@ export default function Hero() {
                     )}
                 </div>
 
-                {/* Stats Bar - Only show for authenticated users */}
                 {user && (
-                    <div
-                        style={{
-                            display: "flex",
-                            gap: 48,
-                            justifyContent: "center",
-                            flexWrap: "wrap",
-                            marginTop: 64,
-                            paddingTop: 40,
-                            borderTop: "1px solid var(--border-glass)",
-                        }}
-                    >
+                    <div className="flex gap-12 justify-center flex-wrap mt-16 pt-10 border-t border-[var(--border-glass)]">
                         {[
-                            { value: "12,400+", label: "Accounts Sold" },
-                            { value: "$2.1M+", label: "Total Volume" },
-                            { value: "99.7%", label: "Success Rate" },
+                            { value: "12k+", label: "Successful Trades" },
+                            { value: "Secure", label: "Escrow System" },
+                            { value: "Instant", label: "Handover" },
                         ].map((stat) => (
-                            <div key={stat.label} style={{ textAlign: "center" }}>
-                                <div
-                                    style={{
-                                        fontSize: "1.8rem",
-                                        fontWeight: 800,
-                                        color: "var(--accent)",
-                                        letterSpacing: "-0.02em",
-                                        fontFamily: "var(--font-mono, monospace)",
-                                    }}
-                                >
+                            <div key={stat.label} className="text-center">
+                                <div className="text-3xl font-extrabold text-[var(--accent)] tracking-tight font-mono">
                                     {stat.value}
                                 </div>
-                                <div
-                                    style={{
-                                        fontSize: "0.85rem",
-                                        color: "var(--text-tertiary)",
-                                        marginTop: 4,
-                                        fontWeight: 500,
-                                    }}
-                                >
+                                <div className="text-sm text-[var(--text-tertiary)] mt-1 font-medium">
                                     {stat.label}
                                 </div>
                             </div>
                         ))}
-                        <p style={{ width: "100%", fontSize: "0.7rem", color: "var(--text-tertiary)", marginTop: 8, opacity: 0.8 }}>
+                        <p className="w-full text-[0.7rem] text-[var(--text-tertiary)] mt-2 opacity-80">
                             Community stats — trusted by players worldwide
                         </p>
                     </div>

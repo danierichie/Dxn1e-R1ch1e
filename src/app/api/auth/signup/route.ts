@@ -1,37 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hash } from "bcryptjs";
 import { z } from "zod";
-import { writeFileSync, readFileSync, existsSync } from "fs";
-import { join } from "path";
-
-// File-based storage
-const USERS_FILE = join(process.cwd(), 'data', 'users.json');
-
-const getUsers = () => {
-  try {
-    if (existsSync(USERS_FILE)) {
-      const data = readFileSync(USERS_FILE, 'utf-8');
-      return JSON.parse(data);
-    }
-    return [];
-  } catch (error) {
-    console.error('Error reading users file:', error);
-    return [];
-  }
-};
-
-const saveUsers = (users: any[]) => {
-  try {
-    const dataDir = join(process.cwd(), 'data');
-    if (!existsSync(dataDir)) {
-      // Create data directory if it doesn't exist
-      require('fs').mkdirSync(dataDir, { recursive: true });
-    }
-    writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-  } catch (error) {
-    console.error('Error saving users file:', error);
-  }
-};
+import { getSupabase } from "@/lib/supabase-server";
 
 const signupSchema = z.object({
   email: z.string().email(),
@@ -48,15 +18,25 @@ export async function POST(request: NextRequest) {
     // Validate input
     const { email, username, fullName, password, phone } = signupSchema.parse(body);
 
-    // Get users from file storage
-    const users = getUsers();
+    const supabase = getSupabase();
+    if (!supabase) {
+      return NextResponse.json(
+        { error: "Supabase connection not configured" },
+        { status: 500 }
+      );
+    }
     
-    // Check if user already exists
-    const existingUser = users.find((u: any) => u.email === email || u.username === username);
+    // Check if user already exists in Supabase
+    const { data: existingUser, error: fetchError } = await supabase
+      .from("users")
+      .select("id, email, username")
+      .or(`email.eq.${email},username.eq.${username}`)
+      .single();
     
     if (existingUser) {
+      const field = existingUser.email === email ? "email" : "username";
       return NextResponse.json(
-        { error: "User with this email or username already exists" },
+        { error: `User with this ${field} already exists` },
         { status: 409 }
       );
     }
@@ -64,30 +44,41 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await hash(password, 12);
 
-    // Create new user
-    const newUser = {
-      id: Date.now().toString(),
+    const insertData = {
       email,
       username,
-      fullName,
-      phone: phone || "",
-      password: hashedPassword,
-      avatar: "",
-      isVerified: false,
-      createdAt: new Date().toISOString(),
-      lastLogin: new Date().toISOString(),
+      password_hash: hashedPassword,
+      display_name: fullName,
+      role: 'user'
     };
+    // Create new user in Supabase 'users' table
+    const { data: newUser, error: insertError } = await supabase
+      .from("users")
+      .insert(insertData)
+      .select()
+      .single();
+    
+    if (insertError) {
+      console.error("Supabase insert error:", insertError);
+      return NextResponse.json(
+        { error: "Failed to create user in database" },
+        { status: 500 }
+      );
+    }
 
-    // Save user to file
-    users.push(newUser);
-    saveUsers(users);
-
-    // Return user data (without password)
-    const { password: _, ...userWithoutPassword } = newUser;
+    // Return user data formatted for frontend
+    const userResponse = {
+      id: newUser.id,
+      email: newUser.email,
+      username: newUser.username,
+      fullName: newUser.display_name,
+      role: newUser.role,
+      createdAt: newUser.created_at
+    };
     
     return NextResponse.json({
       message: "Signup successful",
-      user: userWithoutPassword
+      user: userResponse
     });
 
   } catch (error) {
@@ -106,3 +97,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+

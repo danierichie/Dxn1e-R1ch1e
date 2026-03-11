@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { AlertTriangle, Search, WifiOff } from "lucide-react";
 
 // Error Boundary Component for catching React errors
 class ErrorBoundary extends React.Component<
@@ -27,9 +28,6 @@ class ErrorBoundary extends React.Component<
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
-
-    // You can also log to an error reporting service here
-    // logErrorToService(error, errorInfo);
   }
 
   resetError = () => {
@@ -73,7 +71,9 @@ function DefaultErrorFallback({ error, resetError }: { error: Error; resetError:
           padding: '40px 24px'
         }}
       >
-        <div style={{ fontSize: '3rem', marginBottom: '20px' }}>⚠️</div>
+        <div style={{ color: "var(--accent)", marginBottom: '20px', display: "flex", justifyContent: "center" }}>
+          <AlertTriangle size={60} />
+        </div>
         <h2 style={{ fontSize: '1.5rem', marginBottom: '16px' }}>
           Something went wrong
         </h2>
@@ -151,7 +151,9 @@ export function ComponentErrorBoundary({
             background: 'rgba(255, 107, 107, 0.1)'
           }}
         >
-          <div style={{ fontSize: '2rem', marginBottom: '16px' }}>⚠️</div>
+          <div style={{ color: "#ff6b6b", marginBottom: '16px', display: "flex", justifyContent: "center" }}>
+            <AlertTriangle size={32} />
+          </div>
           <h3 style={{ fontSize: '1.1rem', marginBottom: '8px' }}>
             {componentName} Error
           </h3>
@@ -210,7 +212,9 @@ export function NotFoundPage() {
           padding: '40px 24px'
         }}
       >
-        <div style={{ fontSize: '4rem', marginBottom: '20px' }}>🔍</div>
+        <div style={{ color: "var(--accent)", marginBottom: '20px', display: "flex", justifyContent: "center" }}>
+          <Search size={80} />
+        </div>
         <h1 style={{ fontSize: '2rem', marginBottom: '16px' }}>
           Page Not Found
         </h1>
@@ -254,7 +258,9 @@ export function NetworkError({ onRetry }: { onRetry?: () => void }) {
       }}
     >
       <div className="glass-card" style={{ padding: '32px 24px' }}>
-        <div style={{ fontSize: '3rem', marginBottom: '20px' }}>📶</div>
+        <div style={{ color: "var(--accent)", marginBottom: '20px', display: "flex", justifyContent: "center" }}>
+          <WifiOff size={60} />
+        </div>
         <h3 style={{ fontSize: '1.2rem', marginBottom: '12px' }}>
           Connection Error
         </h3>

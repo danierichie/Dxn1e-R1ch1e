@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "../contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { Lock, ArrowLeft } from "lucide-react";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -49,99 +50,13 @@ export default function LoginPage() {
       display: "flex",
       flexDirection: "column",
     }}>
-      {/* Navigation */}
-      <nav
-        style={{
-          position: "sticky",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 50,
-          background: "rgba(13, 13, 13, 0.8)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: "0 auto",
-            padding: "0 24px",
-            height: 72,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          {/* Back to Home */}
-          <Link
-            href="/"
-            style={{
-              color: "var(--text-secondary)",
-              textDecoration: "none",
-              fontSize: "0.9rem",
-              fontWeight: 500,
-              transition: "color 0.2s",
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.color = "var(--accent)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = "var(--text-secondary)")
-            }
-          >
-            ← Back to Home
-          </Link>
-
-          {/* Logo */}
-          <Link
-            href="/"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              textDecoration: "none",
-              color: "var(--text-primary)",
-            }}
-          >
-            <div
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                background: "linear-gradient(135deg, var(--accent), rgba(21, 101, 192, 0.7))",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 900,
-                fontSize: 16,
-                color: "#0D0D0D",
-              }}
-            >
-              DM
-            </div>
-            <span
-              style={{
-                fontWeight: 800,
-                fontSize: "1.15rem",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              D-COD
-              <span style={{ color: "var(--accent)" }}> MARKETPLACE</span>
-            </span>
-          </Link>
-        </div>
-      </nav>
-
       {/* Main Content */}
       <div style={{
         flex: 1,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "40px 24px",
+        padding: "120px 24px 40px",
         background: "linear-gradient(135deg, var(--bg-primary), var(--bg-secondary))",
       }}>
         <div className="glass-card" style={{
@@ -167,23 +82,23 @@ export default function LoginPage() {
               alignItems: "center",
               justifyContent: "center",
               margin: "0 auto 20px",
-              fontSize: "1.8rem"
+              color: "white"
             }}>
-              🔐
+              <Lock size={30} />
             </div>
-            
-            <h2 style={{ 
-              fontSize: "1.8rem", 
-              fontWeight: 800, 
-              marginBottom: "8px", 
+
+            <h2 style={{
+              fontSize: "1.8rem",
+              fontWeight: 800,
+              marginBottom: "8px",
               margin: 0,
               color: "white"
             }}>
               Welcome Back
             </h2>
-            
-            <p style={{ 
-              color: "rgba(255,255,255,0.9)", 
+
+            <p style={{
+              color: "rgba(255,255,255,0.9)",
               marginBottom: 0,
               fontSize: "0.95rem",
               lineHeight: 1.5
@@ -214,11 +129,11 @@ export default function LoginPage() {
             <div style={{ display: "grid", gap: "20px" }}>
               {/* Email */}
               <div>
-                <label style={{ 
-                  display: "block", 
-                  fontSize: "0.85rem", 
-                  fontWeight: 600, 
-                  marginBottom: "8px", 
+                <label style={{
+                  display: "block",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  marginBottom: "8px",
                   color: "var(--text-secondary)",
                   textTransform: "uppercase",
                   letterSpacing: "0.05em"
@@ -255,11 +170,11 @@ export default function LoginPage() {
 
               {/* Password */}
               <div>
-                <label style={{ 
-                  display: "block", 
-                  fontSize: "0.85rem", 
-                  fontWeight: 600, 
-                  marginBottom: "8px", 
+                <label style={{
+                  display: "block",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  marginBottom: "8px",
                   color: "var(--text-secondary)",
                   textTransform: "uppercase",
                   letterSpacing: "0.05em"
@@ -301,8 +216,8 @@ export default function LoginPage() {
               type="submit"
               disabled={isLoading}
               className="btn-primary"
-              style={{ 
-                width: "100%", 
+              style={{
+                width: "100%",
                 padding: "16px",
                 fontSize: "1.1rem",
                 fontWeight: 700,
@@ -325,7 +240,7 @@ export default function LoginPage() {
                 }
               }}
             >
-              {isLoading 
+              {isLoading
                 ? "Signing In..."
                 : "Sign In to Your Account"
               }

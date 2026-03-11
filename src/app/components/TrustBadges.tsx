@@ -1,55 +1,55 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Lock, Shield, Zap, MessageCircle, Award, CheckCircle, Smartphone } from "lucide-react";
 
 interface TrustBadge {
   id: number;
-  icon: string;
+  icon: React.ReactNode;
   title: string;
   description: string;
   verified?: boolean;
-  link?: string;
 }
 
 const trustBadges: TrustBadge[] = [
   {
     id: 1,
-    icon: "🔒",
+    icon: <Lock size={40} />,
     title: "SSL Secured",
     description: "256-bit encryption for all transactions",
     verified: true
   },
   {
     id: 2,
-    icon: "✓",
+    icon: <CheckCircle size={40} />,
     title: "Verified Accounts",
     description: "All accounts manually verified",
     verified: true
   },
   {
     id: 3,
-    icon: "🛡️",
+    icon: <Shield size={40} />,
     title: "Escrow Protection",
     description: "Your money is safe until delivery",
     verified: true
   },
   {
     id: 4,
-    icon: "⚡",
+    icon: <Zap size={40} />,
     title: "Instant Delivery",
     description: "98% of orders delivered within 5 minutes",
     verified: true
   },
   {
     id: 5,
-    icon: "💬",
+    icon: <MessageCircle size={40} />,
     title: "24/7 Support",
     description: "Round-the-clock customer assistance",
     verified: true
   },
   {
     id: 6,
-    icon: "🏆",
+    icon: <Award size={40} />,
     title: "1000+ Happy Customers",
     description: "Trusted by gamers worldwide",
     verified: true
@@ -78,10 +78,10 @@ export default function TrustBadges() {
   }, []);
 
   return (
-    <section style={{ padding: "80px 24px", maxWidth: 1200, margin: "0 auto" }}>
+    <section id="trust" style={{ padding: "80px 24px", maxWidth: 1200, margin: "0 auto" }}>
       <div style={{ textAlign: "center", marginBottom: 60 }}>
-        <div className="neon-tag" style={{ marginBottom: 20, display: "inline-flex" }}>
-          🛡️ TRUST & SECURITY
+        <div className="neon-tag" style={{ marginBottom: 20, display: "inline-flex", alignItems: "center", gap: 8 }}>
+          <Shield size={16} /> TRUST & SECURITY
         </div>
         <h2 className="section-title" style={{ textAlign: "center" }}>
           Why <span style={{ color: "var(--accent)" }}>Trust Us</span>
@@ -95,7 +95,7 @@ export default function TrustBadges() {
       <div className="glass-card" style={{ padding: "40px", marginBottom: 60, background: "linear-gradient(135deg, rgba(21, 101, 192, 0.1), rgba(21, 101, 192, 0.05))" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 40, textAlign: "center" }}>
           {stats.map((stat, index) => (
-            <div key={index} className="reveal reveal-delay-${index + 1}">
+            <div key={index} className="reveal">
               <div style={{ fontSize: "2.5rem", fontWeight: 800, color: "var(--accent)", marginBottom: 8 }}>
                 {animatedStats[index] > 0 ? (
                   <>
@@ -117,11 +117,11 @@ export default function TrustBadges() {
       {/* Trust Badges Grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24, marginBottom: 60 }}>
         {trustBadges.map((badge, index) => (
-          <div 
+          <div
             key={badge.id}
-            className="glass-card reveal reveal-delay-${index + 1}"
-            style={{ 
-              padding: "32px 24px", 
+            className="glass-card reveal"
+            style={{
+              padding: "32px 24px",
               textAlign: "center",
               position: "relative",
               overflow: "hidden"
@@ -132,28 +132,33 @@ export default function TrustBadges() {
                 position: "absolute",
                 top: 12,
                 right: 12,
-                background: "rgba(76, 175, 80, 0.2)",
+                background: "rgba(76, 175, 80, 0.1)",
                 color: "#4CAF50",
-                padding: "4px 8px",
+                padding: "4px 10px",
                 borderRadius: "12px",
-                fontSize: "0.6rem",
+                fontSize: "0.7rem",
                 fontWeight: 600,
                 display: "flex",
                 alignItems: "center",
-                gap: 4
+                gap: 4,
+                border: "1px solid rgba(76, 175, 80, 0.2)"
               }}>
-                <span>✓</span> Verified
+                <CheckCircle size={12} /> Verified
               </div>
             )}
-            
-            <div style={{ fontSize: "3rem", marginBottom: 16 }}>
+
+            <div style={{
+              color: "var(--accent)",
+              marginBottom: 16,
+              filter: "drop-shadow(0 0 15px rgba(21, 101, 192, 0.3))"
+            }}>
               {badge.icon}
             </div>
-            
+
             <h3 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: 8, margin: 0 }}>
               {badge.title}
             </h3>
-            
+
             <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.5, margin: 0 }}>
               {badge.description}
             </p>
@@ -166,49 +171,43 @@ export default function TrustBadges() {
         <h3 style={{ textAlign: "center", fontSize: "1.5rem", fontWeight: 700, marginBottom: 32 }}>
           Advanced <span style={{ color: "var(--accent)" }}>Security Features</span>
         </h3>
-        
+
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 32 }}>
           <div>
-            <h4 style={{ color: "var(--accent)", marginBottom: 16, fontSize: "1.1rem" }}>🔐 Payment Security</h4>
+            <h4 style={{ color: "var(--accent)", marginBottom: 16, fontSize: "1.1rem", display: "flex", alignItems: "center", gap: 8 }}>
+              <Lock size={18} /> Payment Security
+            </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              <li style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#4CAF50" }}>✓</span>
-                <span style={{ color: "var(--text-secondary)" }}>256-bit SSL encryption</span>
-              </li>
-              <li style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#4CAF50" }}>✓</span>
-                <span style={{ color: "var(--text-secondary)" }}>PCI-DSS compliant</span>
-              </li>
-              <li style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#4CAF50" }}>✓</span>
-                <span style={{ color: "var(--text-secondary)" }}>Escrow protection</span>
-              </li>
-              <li style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#4CAF50" }}>✓</span>
-                <span style={{ color: "var(--text-secondary)" }}>Fraud detection system</span>
-              </li>
+              {[
+                "256-bit SSL encryption",
+                "PCI-DSS compliant",
+                "Escrow protection",
+                "Fraud detection system"
+              ].map((item, i) => (
+                <li key={i} style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 10 }}>
+                  <CheckCircle size={14} style={{ color: "#4CAF50" }} />
+                  <span style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>{item}</span>
+                </li>
+              ))}
             </ul>
           </div>
-          
+
           <div>
-            <h4 style={{ color: "var(--accent)", marginBottom: 16, fontSize: "1.1rem" }}>🛡️ Account Safety</h4>
+            <h4 style={{ color: "var(--accent)", marginBottom: 16, fontSize: "1.1rem", display: "flex", alignItems: "center", gap: 8 }}>
+              <Shield size={18} /> Account Safety
+            </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              <li style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#4CAF50" }}>✓</span>
-                <span style={{ color: "var(--text-secondary)" }}>Manual verification process</span>
-              </li>
-              <li style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#4CAF50" }}>✓</span>
-                <span style={{ color: "var(--text-secondary)" }}>Secure transfer protocol</span>
-              </li>
-              <li style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#4CAF50" }}>✓</span>
-                <span style={{ color: "var(--text-secondary)" }}>24/7 monitoring</span>
-              </li>
-              <li style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#4CAF50" }}>✓</span>
-                <span style={{ color: "var(--text-secondary)" }}>Money-back guarantee</span>
-              </li>
+              {[
+                "Manual verification process",
+                "Secure transfer protocol",
+                "24/7 monitoring",
+                "Money-back guarantee"
+              ].map((item, i) => (
+                <li key={i} style={{ marginBottom: 12, display: "flex", alignItems: "center", gap: 10 }}>
+                  <CheckCircle size={14} style={{ color: "#4CAF50" }} />
+                  <span style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>{item}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

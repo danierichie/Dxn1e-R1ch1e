@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { Lock, User, X } from "lucide-react";
 
 interface AuthFormsProps {
   onClose: () => void;
@@ -111,7 +112,10 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
             height: "36px",
             borderRadius: "50%",
             cursor: "pointer",
-            fontSize: "1.2rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 0,
             zIndex: 10,
             transition: "all 0.3s ease",
           }}
@@ -124,7 +128,7 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
             e.currentTarget.style.transform = "scale(1)";
           }}
         >
-          ×
+          <X size={20} />
         </button>
 
         {/* Header with Gradient */}
@@ -144,29 +148,29 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
             alignItems: "center",
             justifyContent: "center",
             margin: "0 auto 20px",
-            fontSize: "1.8rem"
+            color: "white"
           }}>
-            {mode === "login" ? "🔐" : "👤"}
+            {mode === "login" ? <Lock size={28} /> : <User size={28} />}
           </div>
-          
-          <h2 style={{ 
-            fontSize: "1.8rem", 
-            fontWeight: 800, 
-            marginBottom: "8px", 
+
+          <h2 style={{
+            fontSize: "1.8rem",
+            fontWeight: 800,
+            marginBottom: "8px",
             margin: 0,
             color: "white"
           }}>
             {mode === "login" ? "Welcome Back" : "Join D-CODE"}
           </h2>
-          
-          <p style={{ 
-            color: "rgba(255,255,255,0.9)", 
+
+          <p style={{
+            color: "rgba(255,255,255,0.9)",
             marginBottom: 0,
             fontSize: "0.95rem",
             lineHeight: 1.5
           }}>
-            {mode === "login" 
-              ? "Sign in to access your elite gaming account marketplace" 
+            {mode === "login"
+              ? "Sign in to access your elite gaming account marketplace"
               : "Create your account and start trading premium COD Mobile accounts"
             }
           </p>
@@ -194,11 +198,11 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
           <div style={{ display: "grid", gap: "20px" }}>
             {/* Email */}
             <div>
-              <label style={{ 
-                display: "block", 
-                fontSize: "0.85rem", 
-                fontWeight: 600, 
-                marginBottom: "8px", 
+              <label style={{
+                display: "block",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                marginBottom: "8px",
                 color: "var(--text-secondary)",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em"
@@ -236,11 +240,11 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
             {/* Username (signup only) */}
             {mode === "signup" && (
               <div>
-                <label style={{ 
-                  display: "block", 
-                  fontSize: "0.85rem", 
-                  fontWeight: 600, 
-                  marginBottom: "8px", 
+                <label style={{
+                  display: "block",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  marginBottom: "8px",
                   color: "var(--text-secondary)",
                   textTransform: "uppercase",
                   letterSpacing: "0.05em"
@@ -281,11 +285,11 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
             {/* Full Name (signup only) */}
             {mode === "signup" && (
               <div>
-                <label style={{ 
-                  display: "block", 
-                  fontSize: "0.85rem", 
-                  fontWeight: 600, 
-                  marginBottom: "8px", 
+                <label style={{
+                  display: "block",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  marginBottom: "8px",
                   color: "var(--text-secondary)",
                   textTransform: "uppercase",
                   letterSpacing: "0.05em"
@@ -325,11 +329,11 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
             {/* Phone (signup only, optional) */}
             {mode === "signup" && (
               <div>
-                <label style={{ 
-                  display: "block", 
-                  fontSize: "0.85rem", 
-                  fontWeight: 600, 
-                  marginBottom: "8px", 
+                <label style={{
+                  display: "block",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  marginBottom: "8px",
                   color: "var(--text-secondary)",
                   textTransform: "uppercase",
                   letterSpacing: "0.05em"
@@ -366,11 +370,11 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
 
             {/* Password */}
             <div>
-              <label style={{ 
-                display: "block", 
-                fontSize: "0.85rem", 
-                fontWeight: 600, 
-                marginBottom: "8px", 
+              <label style={{
+                display: "block",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                marginBottom: "8px",
                 color: "var(--text-secondary)",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em"
@@ -405,9 +409,9 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
                 }}
               />
               {mode === "signup" && (
-                <p style={{ 
-                  fontSize: "0.75rem", 
-                  color: "var(--text-tertiary)", 
+                <p style={{
+                  fontSize: "0.75rem",
+                  color: "var(--text-tertiary)",
                   marginTop: "6px",
                   fontStyle: "italic"
                 }}>
@@ -422,8 +426,8 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
             type="submit"
             disabled={isLoading}
             className="btn-primary"
-            style={{ 
-              width: "100%", 
+            style={{
+              width: "100%",
               padding: "16px",
               fontSize: "1.1rem",
               fontWeight: 700,
@@ -446,7 +450,7 @@ export default function AuthForms({ onClose, initialMode = "login" }: AuthFormsP
               }
             }}
           >
-            {isLoading 
+            {isLoading
               ? (mode === "login" ? "Signing In..." : "Creating Account...")
               : (mode === "login" ? "Sign In to Your Account" : "Create Your Account")
             }

@@ -14,7 +14,6 @@ export default function Navbar() {
     const { user, logout } = useAuth();
     const pathname = usePathname();
 
-    // Touch gesture handlers for mobile menu
     const handleTouchStart = (e: React.TouchEvent) => {
         setTouchEnd(0);
         setTouchStart(e.targetTouches[0].clientX);
@@ -27,465 +26,169 @@ export default function Navbar() {
     const handleTouchEnd = () => {
         if (!touchStart || !touchEnd) return;
         const distance = touchStart - touchEnd;
-        const isLeftSwipe = distance > 50;
-        const isRightSwipe = distance < -50;
-
-        // Swipe left to close menu (common mobile pattern)
-        if (isLeftSwipe && mobileOpen) {
+        if (distance > 50 && mobileOpen) {
             setMobileOpen(false);
         }
     };
 
+    const navLinks = user ? [
+        { label: "Home", href: "/" },
+        { label: "Marketplace", href: "/marketplace" },
+        { label: "Order History", href: "/order-history" },
+        { label: "Sell to Us", href: "/sell-to-us" },
+        { label: "How to Buy/Sell", href: "/how-it-works" },
+        { label: "Contact", href: "/contact" },
+    ] : [
+        { label: "Home", href: "/" },
+        { label: "Marketplace", href: "/marketplace" },
+        { label: "How to Buy/Sell", href: "/how-it-works" },
+        { label: "Contact", href: "/contact" },
+    ];
+
     return (
-        <nav
-            style={{
-                position: "fixed",
-                top: 3,
-                left: 0,
-                right: 0,
-                zIndex: 50,
-                background: "var(--bg-glass)",
-                backdropFilter: "blur(24px)",
-                WebkitBackdropFilter: "blur(24px)",
-                borderBottom: "1px solid var(--border-glass)",
-                boxShadow: "0 1px 3px var(--bg-primary)",
-            }}
-        >
-            <div
-                style={{
-                    maxWidth: 1200,
-                    margin: "0 auto",
-                    padding: "0 24px",
-                    height: 72,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                }}
-            >
-                {/* Logo and Notification Bell */}
-                <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                    {/* Logo */}
-                    <Link
-                        href="/"
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            textDecoration: "none",
-                            color: "var(--text-primary)",
-                        }}
-                    >
-                        <div
-                            style={{
-                                width: 36,
-                                height: 36,
-                                borderRadius: 10,
-                                background:
-                                    "linear-gradient(135deg, var(--accent), rgba(21, 101, 192, 0.7))",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                fontWeight: 900,
-                                fontSize: 16,
-                                color: "#0D0D0D",
-                            }}
-                        >
+        <nav className="fixed top-[3px] left-0 right-0 z-50 bg-[var(--bg-glass)] backdrop-blur-xl border-b border-[var(--border-glass)] shadow-sm">
+            <div className="max-w-[1200px] mx-auto px-6 h-[72px] flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <Link href="/" className="flex items-center gap-2.5 no-underline text-[var(--text-primary)]">
+                        <div className="w-9 h-9 rounded-[10px] bg-gradient-to-br from-[var(--accent)] to-[rgba(21,101,192,0.7)] flex items-center justify-center font-black text-base text-[#0D0D0D]">
                             DM
                         </div>
-                        <span
-                            style={{
-                                fontWeight: 800,
-                                fontSize: "1.15rem",
-                                letterSpacing: "-0.02em",
-                            }}
-                        >
-                            D-COD
-                            <span style={{ color: "var(--accent)" }}> MARKETPLACE</span>
+                        <span className="font-extrabold text-lg tracking-tight">
+                            D-COD<span className="text-[var(--accent)]"> MARKETPLACE</span>
                         </span>
                     </Link>
-
-                    {/* Notification Bell */}
                     <NotificationSystem />
                 </div>
 
-                {/* Desktop Navigation */}
-                <div
-                    className="nav-desktop"
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 32,
-                    }}
-                >
-                    {/* Navigation Links */}
-                    <div style={{ display: "flex", gap: 24 }}>
-                        {(user ? [
-                            { label: "Home", href: "/" },
-                            { label: "Marketplace", href: "/marketplace" },
-                            { label: "Order History", href: "/order-history" },
-                            { label: "Sell to Us", href: "/sell-to-us" },
-                            { label: "How It Works", href: "/how-it-works" },
-                            { label: "Contact", href: "/contact" },
-                        ] : [
-                            { label: "Home", href: "/" },
-                            { label: "Marketplace", href: "/marketplace" },
-                            { label: "Contact", href: "/contact" },
-                        ]).map((item) => (
+                <div className="hidden md:flex items-center gap-8">
+                    <div className="flex gap-6">
+                        {navLinks.map((item) => (
                             <Link
                                 key={item.label}
                                 href={item.href}
-                                style={{
-                                    color: pathname === item.href ? "var(--accent)" : "var(--text-secondary)",
-                                    textDecoration: "none",
-                                    fontSize: "0.9rem",
-                                    fontWeight: pathname === item.href ? 600 : 500,
-                                    transition: "color 0.2s",
-                                    letterSpacing: "0.01em",
-                                    position: "relative",
-                                }}
-                                onMouseEnter={(e) => {
-                                    if (pathname !== item.href) {
-                                        e.currentTarget.style.color = "var(--accent)";
-                                    }
-                                }}
-                                onMouseLeave={(e) => {
-                                    if (pathname !== item.href) {
-                                        e.currentTarget.style.color = "var(--text-secondary)";
-                                    }
-                                }}
+                                className={`no-underline text-sm tracking-wide relative transition-colors duration-200 hover:text-[var(--accent)]
+                                    ${pathname === item.href
+                                        ? 'text-[var(--accent)] font-semibold'
+                                        : 'text-[var(--text-secondary)] font-medium'
+                                    }`}
                             >
                                 {item.label}
                                 {pathname === item.href && (
-                                    <div
-                                        style={{
-                                            position: "absolute",
-                                            bottom: "-8px",
-                                            left: 0,
-                                            right: 0,
-                                            height: "2px",
-                                            background: "var(--accent)",
-                                            borderRadius: "1px",
-                                        }}
-                                    />
+                                    <div className="absolute -bottom-2 left-0 right-0 h-0.5 bg-[var(--accent)] rounded-sm" />
                                 )}
                             </Link>
                         ))}
                     </div>
 
-                    {/* Auth Section */}
-                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div className="flex items-center gap-3">
                         <ThemeToggle />
                         {user ? (
-                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                            <div className="flex items-center gap-3">
                                 <Link
                                     href="/profile"
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: 8,
-                                        padding: "8px 16px",
-                                        background: "var(--bg-glass)",
-                                        border: "1px solid var(--border-glass)",
-                                        borderRadius: "20px",
-                                        textDecoration: "none",
-                                        color: "var(--text-primary)",
-                                        fontSize: "0.9rem",
-                                        transition: "all 0.2s",
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.background = "var(--bg-glass-hover)";
-                                        e.currentTarget.style.borderColor = "var(--border-accent)";
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.background = "var(--bg-glass)";
-                                        e.currentTarget.style.borderColor = "var(--border-glass)";
-                                    }}
+                                    className="flex items-center gap-2 px-4 py-2 bg-[var(--bg-glass)] border border-[var(--border-glass)] rounded-full no-underline text-[var(--text-primary)] text-sm transition-all duration-200 hover:bg-[var(--bg-glass-hover)] hover:border-[var(--border-accent)]"
                                 >
-                                    <div style={{
-                                        width: "24px",
-                                        height: "24px",
-                                        borderRadius: "50%",
-                                        background: "var(--accent)",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        color: "white",
-                                        fontSize: "0.7rem",
-                                        fontWeight: "bold"
-                                    }}>
-                                        {user.fullName.charAt(0).toUpperCase()}
+                                    <div className="w-6 h-6 rounded-full bg-[var(--accent)] flex items-center justify-center text-white text-[0.7rem] font-bold">
+                                        {(user.fullName || user.email || "?").charAt(0).toUpperCase()}
                                     </div>
-                                    <span>{user.fullName}</span>
+                                    <span>{user.fullName || user.email.split('@')[0]}</span>
                                 </Link>
                                 <button
                                     onClick={logout}
-                                    style={{
-                                        background: "none",
-                                        border: "1px solid var(--border-glass)",
-                                        color: "var(--text-secondary)",
-                                        padding: "8px 16px",
-                                        borderRadius: "20px",
-                                        fontSize: "0.9rem",
-                                        cursor: "pointer",
-                                        transition: "all 0.2s",
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.borderColor = "var(--accent)";
-                                        e.currentTarget.style.color = "var(--accent)";
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.borderColor = "var(--border-glass)";
-                                        e.currentTarget.style.color = "var(--text-secondary)";
-                                    }}
+                                    className="bg-transparent border border-[var(--border-glass)] text-[var(--text-secondary)] px-4 py-2 rounded-full text-sm cursor-pointer transition-all duration-200 hover:border-[var(--accent)] hover:text-[var(--accent)]"
                                 >
                                     Sign Out
                                 </button>
                             </div>
                         ) : (
-                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                            <div className="flex items-center gap-3">
                                 <Link
                                     href="/login"
-                                    style={{
-                                        background: "none",
-                                        border: "1px solid var(--border-glass)",
-                                        color: "var(--text-secondary)",
-                                        padding: "8px 16px",
-                                        borderRadius: "20px",
-                                        fontSize: "0.9rem",
-                                        cursor: "pointer",
-                                        transition: "all 0.2s",
-                                        textDecoration: "none",
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.currentTarget.style.borderColor = "var(--accent)";
-                                        e.currentTarget.style.color = "var(--accent)";
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.currentTarget.style.borderColor = "var(--border-glass)";
-                                        e.currentTarget.style.color = "var(--text-secondary)";
-                                    }}
+                                    className="btn-primary !py-2.5 !px-6 !text-sm no-underline flex items-center gap-2"
                                 >
                                     Sign In
-                                </Link>
-                                <Link
-                                    href="/signup"
-                                    className="btn-primary"
-                                    style={{ padding: "10px 20px", fontSize: "0.9rem", textDecoration: "none" }}
-                                >
-                                    Sign Up
                                 </Link>
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* Mobile Toggle */}
                 <button
                     onClick={() => setMobileOpen(!mobileOpen)}
-                    className="nav-mobile-toggle"
-                    style={{
-                        display: "none",
-                        background: "none",
-                        border: "none",
-                        color: "var(--text-primary)",
-                        fontSize: 24,
-                        cursor: "pointer",
-                        padding: 4,
-                    }}
+                    className="md:hidden bg-transparent border-none text-[var(--text-primary)] text-2xl cursor-pointer p-1"
                     aria-label="Toggle menu"
                 >
                     {mobileOpen ? "✕" : "☰"}
                 </button>
             </div>
 
-            {/* Mobile Menu */}
             {mobileOpen && (
                 <div
-                    className="nav-mobile-menu"
-                    style={{
-                        padding: "16px 24px 24px",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 16,
-                        borderTop: "1px solid var(--border-glass)",
-                    }}
+                    className="md:hidden px-6 py-4 pb-6 flex flex-col gap-4 border-t border-[var(--border-glass)] max-h-[calc(100vh-72px)] overflow-y-auto select-none touch-pan-y"
+                    style={{ WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
                 >
-                    {/* Mobile Theme Toggle */}
-                    <div style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: "8px 0",
-                        borderBottom: "1px solid var(--border-glass)",
-                        marginBottom: "8px"
-                    }}>
-                        <span style={{
-                            fontSize: "0.9rem",
-                            color: "var(--text-secondary)",
-                            fontWeight: 500
-                        }}>
-                            Theme
-                        </span>
+                    <div className="flex items-center justify-between py-2 border-b border-[var(--border-glass)] mb-2">
+                        <span className="text-sm text-[var(--text-secondary)] font-medium">Theme</span>
                         <ThemeToggle />
                     </div>
 
-                    {/* Mobile User Profile (if logged in) */}
                     {user && (
-                        <div style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 12,
-                            padding: "12px",
-                            background: "var(--bg-glass)",
-                            borderRadius: "12px",
-                            border: "1px solid var(--border-glass)",
-                            marginBottom: "8px"
-                        }}>
-                            <div style={{
-                                width: "32px",
-                                height: "32px",
-                                borderRadius: "50%",
-                                background: "var(--accent)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "white",
-                                fontSize: "0.8rem",
-                                fontWeight: "bold"
-                            }}>
-                                {user.fullName.charAt(0).toUpperCase()}
+                        <div className="flex items-center gap-3 p-3 bg-[var(--bg-glass)] rounded-xl border border-[var(--border-glass)] mb-2">
+                            <div className="w-8 h-8 rounded-full bg-[var(--accent)] flex items-center justify-center text-white text-sm font-bold">
+                                {(user.fullName || user.email || "?").charAt(0).toUpperCase()}
                             </div>
-                            <div style={{ flex: 1 }}>
-                                <div style={{
-                                    fontSize: "0.9rem",
-                                    fontWeight: 600,
-                                    color: "var(--text-primary)",
-                                    marginBottom: "2px"
-                                }}>
-                                    {user.fullName}
-                                </div>
-                                <div style={{
-                                    fontSize: "0.8rem",
-                                    color: "var(--text-secondary)"
-                                }}>
-                                    {user.email}
-                                </div>
+                            <div className="flex-1">
+                                <div className="text-sm font-semibold text-[var(--text-primary)] mb-0.5">{user.fullName || user.email.split('@')[0]}</div>
+                                <div className="text-xs text-[var(--text-secondary)]">{user.email}</div>
                             </div>
                             <Link
                                 href="/profile"
                                 onClick={() => setMobileOpen(false)}
-                                style={{
-                                    padding: "6px 12px",
-                                    background: "var(--accent)",
-                                    color: "white",
-                                    textDecoration: "none",
-                                    borderRadius: "8px",
-                                    fontSize: "0.8rem",
-                                    fontWeight: 600
-                                }}
+                                className="px-3 py-1.5 bg-[var(--accent)] text-white no-underline rounded-lg text-xs font-semibold"
                             >
                                 Profile
                             </Link>
                         </div>
                     )}
 
-                    {/* Mobile Navigation Links */}
-                    {(user ? [
-                        { label: "Home", href: "/" },
-                        { label: "Marketplace", href: "/marketplace" },
-                        { label: "Order History", href: "/order-history" },
-                        { label: "Sell to Us", href: "/sell-to-us" },
-                        { label: "How It Works", href: "/how-it-works" },
-                        { label: "Contact", href: "/contact" },
-                    ] : [
-                        { label: "Home", href: "/" },
-                        { label: "Marketplace", href: "/marketplace" },
-                        { label: "Contact", href: "/contact" },
-                    ]).map((item) => (
+                    {navLinks.map((item) => (
                         <Link
                             key={item.label}
                             href={item.href}
                             onClick={() => setMobileOpen(false)}
-                            style={{
-                                color: pathname === item.href ? "var(--accent)" : "var(--text-secondary)",
-                                textDecoration: "none",
-                                fontSize: "1rem",
-                                fontWeight: pathname === item.href ? 600 : 500,
-                                padding: "8px 0",
-                                borderLeft: pathname === item.href ? "3px solid var(--accent)" : "none",
-                                paddingLeft: pathname === item.href ? "12px" : "0",
-                            }}
+                            className={`no-underline text-base py-3 px-2 rounded-lg active:bg-[var(--bg-glass-hover)] active:scale-[0.98] transition-all touch-manipulation select-none
+                                ${pathname === item.href
+                                    ? 'text-[var(--accent)] font-semibold border-l-[3px] border-l-[var(--accent)] pl-3'
+                                    : 'text-[var(--text-secondary)] font-medium'
+                                }`}
                         >
                             {item.label}
                         </Link>
                     ))}
-                    
-                    {/* Mobile Auth Links (only for non-logged-in users) */}
+
                     {!user && (
-                        <>
-                            <div style={{ borderTop: "1px solid var(--border-glass)", marginTop: "8px", paddingTop: "16px" }}>
-                                <Link
-                                    href="/login"
-                                    onClick={() => setMobileOpen(false)}
-                                    style={{
-                                        color: "var(--accent)",
-                                        textDecoration: "none",
-                                        fontSize: "1rem",
-                                        fontWeight: 600,
-                                        padding: "12px 0",
-                                        display: "block"
-                                    }}
-                                >
-                                    Sign In
-                                </Link>
-                                <Link
-                                    href="/signup"
-                                    onClick={() => setMobileOpen(false)}
-                                    style={{
-                                        color: "var(--accent)",
-                                        textDecoration: "none",
-                                        fontSize: "1rem",
-                                        fontWeight: 600,
-                                        padding: "8px 0",
-                                        display: "block"
-                                    }}
-                                >
-                                    Sign Up
-                                </Link>
-                            </div>
-                        </>
+                        <div className="border-t border-[var(--border-glass)] mt-2 pt-4">
+                            <Link
+                                href="/login"
+                                onClick={() => setMobileOpen(false)}
+                                className="btn-primary block w-full !text-center no-underline text-base font-semibold py-3"
+                            >
+                                Sign In
+                            </Link>
+                        </div>
                     )}
 
-                    {/* Mobile Logout (only for logged-in users) */}
                     {user && (
-                        <div style={{ borderTop: "1px solid var(--border-glass)", marginTop: "8px", paddingTop: "16px" }}>
+                        <div className="border-t border-[var(--border-glass)] mt-2 pt-4">
                             <button
                                 onClick={() => {
                                     logout();
                                     setMobileOpen(false);
                                 }}
-                                style={{
-                                    background: "none",
-                                    border: "1px solid var(--border-glass)",
-                                    color: "var(--text-secondary)",
-                                    padding: "10px 16px",
-                                    borderRadius: "8px",
-                                    fontSize: "0.9rem",
-                                    cursor: "pointer",
-                                    width: "100%",
-                                    transition: "all 0.2s"
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.borderColor = "#ff4757";
-                                    e.currentTarget.style.color = "#ff4757";
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.borderColor = "var(--border-glass)";
-                                    e.currentTarget.style.color = "var(--text-secondary)";
-                                }}
+                                className="w-full bg-transparent border border-[var(--border-glass)] text-[var(--text-secondary)] py-2.5 px-4 rounded-lg text-sm cursor-pointer transition-all duration-200 hover:border-red-500 hover:text-red-500 active:scale-95 touch-manipulation select-none"
                             >
                                 Sign Out
                             </button>
@@ -493,69 +196,6 @@ export default function Navbar() {
                     )}
                 </div>
             )}
-
-            <style>{`
-        @media (max-width: 768px) {
-          .nav-desktop { display: none !important; }
-          .nav-mobile-toggle { display: block !important; }
-          
-          /* Enhanced mobile menu interactions */
-          .nav-mobile-menu {
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior: contain;
-            touch-action: pan-y;
-            max-height: calc(100vh - 72px);
-            overflow-y: auto;
-          }
-          
-          /* Better touch feedback for menu items */
-          .nav-mobile-menu a {
-            transition: background-color 0.2s ease;
-            border-radius: 8px;
-            padding: 12px 8px !important;
-            margin: 2px 0;
-            touch-action: manipulation;
-          }
-          
-          .nav-mobile-menu a:active {
-            background-color: var(--bg-glass-hover) !important;
-            transform: scale(0.98);
-          }
-          
-          /* Better button touch feedback */
-          .nav-mobile-menu button {
-            touch-action: manipulation;
-            transition: transform 0.1s ease;
-          }
-          
-          .nav-mobile-menu button:active {
-            transform: scale(0.95);
-          }
-          
-          /* Prevent text selection in menu */
-          .nav-mobile-menu {
-            -webkit-user-select: none;
-            user-select: none;
-          }
-          
-          .nav-mobile-menu a,
-          .nav-mobile-menu button {
-            -webkit-user-select: none;
-            user-select: none;
-          }
-        }
-        
-        @media (max-width: 480px) {
-          .nav-mobile-menu {
-            padding: 12px 16px 20px;
-          }
-          
-          .nav-mobile-menu a {
-            padding: 14px 8px !important;
-            font-size: 1.1rem !important;
-          }
-        }
-      `}</style>
         </nav>
     );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Bell, CheckCircle, AlertTriangle, XCircle, Info, Megaphone, X } from "lucide-react";
 
 interface Notification {
   id: string;
@@ -106,7 +107,7 @@ export default function NotificationSystem({ onNewNotification }: NotificationSy
     };
 
     setNotifications(prev => [notification, ...prev]);
-    
+
     // Save to localStorage
     const updated = [notification, ...notifications];
     localStorage.setItem('notifications', JSON.stringify(updated));
@@ -126,7 +127,7 @@ export default function NotificationSystem({ onNewNotification }: NotificationSy
   };
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(n => n.id === id ? { ...n, read: true } : n)
     );
   };
@@ -142,11 +143,11 @@ export default function NotificationSystem({ onNewNotification }: NotificationSy
 
   const getNotificationIcon = (type: Notification['type']) => {
     switch (type) {
-      case 'success': return '✅';
-      case 'warning': return '⚠️';
-      case 'error': return '❌';
-      case 'info': return 'ℹ️';
-      default: return '📢';
+      case 'success': return <CheckCircle size={18} />;
+      case 'warning': return <AlertTriangle size={18} />;
+      case 'error': return <XCircle size={18} />;
+      case 'info': return <Info size={18} />;
+      default: return <Megaphone size={18} />;
     }
   };
 
@@ -181,6 +182,7 @@ export default function NotificationSystem({ onNewNotification }: NotificationSy
             cursor: 'pointer',
             transition: 'all 0.3s ease',
             backdropFilter: 'blur(10px)',
+            color: 'var(--text-primary)'
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = 'var(--bg-glass-hover)';
@@ -191,7 +193,7 @@ export default function NotificationSystem({ onNewNotification }: NotificationSy
             e.currentTarget.style.transform = 'scale(1)';
           }}
         >
-          <span style={{ fontSize: '18px' }}>🔔</span>
+          <Bell size={18} />
           {unreadCount > 0 && (
             <span style={{
               position: 'absolute',
@@ -270,7 +272,9 @@ export default function NotificationSystem({ onNewNotification }: NotificationSy
                 textAlign: 'center',
                 color: 'var(--text-tertiary)',
               }}>
-                <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🔔</div>
+                <div style={{ color: "var(--accent)", fontSize: '3rem', marginBottom: '16px', display: "flex", justifyContent: "center" }}>
+                  <Bell size={60} />
+                </div>
                 <p>No notifications yet</p>
               </div>
             ) : (
@@ -287,7 +291,7 @@ export default function NotificationSystem({ onNewNotification }: NotificationSy
                   onClick={() => markAsRead(notification.id)}
                 >
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                    <span style={{ fontSize: '20px', marginTop: '2px' }}>
+                    <span style={{ color: getNotificationColor(notification.type), marginTop: '2px' }}>
                       {getNotificationIcon(notification.type)}
                     </span>
                     <div style={{ flex: 1 }}>
@@ -306,10 +310,12 @@ export default function NotificationSystem({ onNewNotification }: NotificationSy
                             color: 'var(--text-tertiary)',
                             cursor: 'pointer',
                             padding: '4px',
-                            fontSize: '16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
                           }}
                         >
-                          ×
+                          <X size={16} />
                         </button>
                       </div>
                       <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>

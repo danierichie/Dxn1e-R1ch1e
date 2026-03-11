@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# D-COD Marketplace
 
-## Getting Started
+A custom marketplace for Call of Duty: Mobile accounts. Built with Next.js, Supabase, and Tailwind.
 
-First, run the development server:
+## Project Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This is a specialized platform where players can securely buy or sell high-end CODM accounts. It handles everything from verification to appraisal, using Supabase for the backend and Next.js for the frontend.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Key Parts
+- **Marketplace**: Browse verified listings with rare skins and blueprints.
+- **Sell System**: Simple form to submit account details for manual appraisal.
+- **Auth**: Secure login/signup system using Supabase.
+- **Admin**: Internal dashboard to manage submissions and inventory.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Install things**
+   ```bash
+   npm install
+   ```
 
-## Learn More
+2. **Environment**
+   Copy `.env.example` to `.env.local` and add your Supabase credentials:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
 
-To learn more about Next.js, take a look at the following resources:
+3. **Database**
+   Run the SQL in `supabase-schema.sql` inside your Supabase project's SQL editor to set up the tables.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **Run Dev**
+   ```bash
+   npm run dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deploys automatically to Vercel whenever changes are pushed to `main`.

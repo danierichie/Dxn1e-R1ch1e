@@ -1,32 +1,32 @@
 "use client";
 
-import React from "react";
+import { Phone, Mail, MessageSquare, Send, MessageCircle } from "lucide-react";
 
 export default function Contact() {
     const contactMethods = [
         {
-            icon: "📞",
+            icon: <Phone size={32} />,
             label: "Phone",
             value: "+234 816 992 5603",
             link: "tel:+2348169925603",
             color: "#00D2FF"
         },
         {
-            icon: "📧",
+            icon: <Mail size={32} />,
             label: "Email",
             value: "danielcodmgaming@gmail.com",
             link: "mailto:danielcodmgaming@gmail.com",
             color: "#FF6B6B"
         },
         {
-            icon: "🎮",
+            icon: <MessageSquare size={32} />,
             label: "Discord",
             value: "Join our Discord",
             link: "https://discord.gg/your-discord-code",
             color: "#5865F2"
         },
         {
-            icon: "✈️",
+            icon: <Send size={32} />,
             label: "Telegram",
             value: "@dcodmarketplace",
             link: "https://t.me/dcodmarketplace",
@@ -39,9 +39,9 @@ export default function Contact() {
             <div style={{ textAlign: "center", marginBottom: 60 }}>
                 <div
                     className="neon-tag"
-                    style={{ marginBottom: 20, display: "inline-flex" }}
+                    style={{ marginBottom: 20, display: "inline-flex", alignItems: "center", gap: 8 }}
                 >
-                    💬 GET IN TOUCH
+                    <MessageCircle size={16} /> GET IN TOUCH
                 </div>
                 <h2 className="section-title" style={{ textAlign: "center" }}>
                     Have Questions? Reach Out <span style={{ color: "var(--accent)" }}>Directly</span>
@@ -76,16 +76,16 @@ export default function Contact() {
                         }}
                     >
                         <div style={{
-                            fontSize: "2.5rem",
+                            color: method.color,
                             marginBottom: 8,
-                            filter: `drop-shadow(0 0 15px ${method.color}44)`
+                            filter: `drop-shadow(0 0 10px ${method.color}66)`
                         }}>
                             {method.icon}
                         </div>
                         <div>
                             <h3 style={{
                                 fontSize: "0.8rem",
-                                color: "var(--text-tertiary)",
+                                color: "var(--text-secondary)",
                                 textTransform: "uppercase",
                                 letterSpacing: "0.1em",
                                 marginBottom: 4

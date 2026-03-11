@@ -24,7 +24,12 @@ export async function POST(request: Request) {
   }
   const body = await request.json();
   const listing = body.listing ?? body;
-  const { error } = await supabase.from("market_listings").insert({ data: listing });
+  const created_by = body.created_by || null;
+  
+  const { error } = await supabase.from("market_listings").insert({ 
+    data: listing,
+    created_by: created_by
+  });
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

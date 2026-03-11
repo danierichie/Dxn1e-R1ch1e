@@ -22,9 +22,15 @@ export async function POST(request: Request) {
   if (!supabase) {
     return NextResponse.json({ error: "Database not configured" }, { status: 503 });
   }
-  const orders = await request.json();
-  const body = Array.isArray(orders) ? orders : [orders];
-  const rows = body.map((data: object) => ({ data }));
+  const body = await request.json();
+  const orders = Array.isArray(body.orders || body) ? (body.orders || body) : [body];
+  const created_by = body.created_by || null;
+  
+  const rows = orders.map((data: object) => ({ 
+    data,
+    created_by: created_by 
+  }));
+  
   const { error } = await supabase.from("orders").insert(rows);
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

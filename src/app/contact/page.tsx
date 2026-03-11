@@ -5,8 +5,8 @@ import CommunitySection from "../components/CommunitySection";
 
 export default function ContactPage() {
     return (
-        <main style={{ paddingTop: "80px" }}>
-            <div style={{ padding: "40px 0" }}>
+        <main className="pt-20">
+            <div className="py-10">
                 <Contact />
                 <CommunitySection />
             </div>

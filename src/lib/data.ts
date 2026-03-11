@@ -1,7 +1,4 @@
-/**
- * Data layer: tries API (Supabase) first, falls back to localStorage.
- * Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to enable persistence.
- */
+// Persistence layer: Supabase with localStorage as a backup.
 
 const API = typeof window !== "undefined" ? "" : undefined;
 

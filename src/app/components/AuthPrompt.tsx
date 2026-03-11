@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Lock, Check, UserPlus, ShieldCheck, X } from "lucide-react";
 
 interface AuthPromptProps {
   onClose: () => void;
@@ -30,8 +31,8 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
       padding: "20px",
       animation: "fadeIn 0.3s ease"
     }}>
-      <div 
-        className="glass-card" 
+      <div
+        className="glass-card"
         style={{
           maxWidth: "420px",
           width: "100%",
@@ -58,13 +59,16 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
             height: "32px",
             borderRadius: "50%",
             cursor: "pointer",
-            fontSize: "1rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 0,
             zIndex: 10,
             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             transform: isHoveringClose ? "scale(1.1) rotate(90deg)" : "scale(1) rotate(0deg)",
           }}
         >
-          ×
+          <X size={18} />
         </button>
 
         <div style={{ padding: "48px 32px", textAlign: "center" }}>
@@ -78,13 +82,12 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
             alignItems: "center",
             justifyContent: "center",
             margin: "0 auto 32px",
-            fontSize: "2rem",
             color: "white",
             boxShadow: "0 8px 32px rgba(21, 101, 192, 0.4)",
             animation: "pulse 2s infinite",
             position: "relative"
           }}>
-            🔒
+            <Lock size={32} />
             <div style={{
               position: "absolute",
               top: "-2px",
@@ -99,17 +102,17 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
           </div>
 
           {/* Title */}
-          <h2 style={{ 
-            fontSize: "1.8rem", 
-            fontWeight: 800, 
-            marginBottom: "12px", 
+          <h2 style={{
+            fontSize: "1.8rem",
+            fontWeight: 800,
+            marginBottom: "12px",
             color: "var(--text-primary)",
             lineHeight: 1.2,
             textShadow: "0 2px 4px rgba(0,0,0,0.3)"
           }}>
             Authentication Required
           </h2>
-          
+
           {/* Subtitle */}
           <div style={{
             display: "inline-block",
@@ -126,10 +129,10 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
           }}>
             Premium Access Only
           </div>
-          
+
           {/* Description */}
-          <p style={{ 
-            color: "var(--text-secondary)", 
+          <p style={{
+            color: "var(--text-secondary)",
             marginBottom: "36px",
             lineHeight: 1.6,
             fontSize: "1rem",
@@ -154,7 +157,7 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
               color: "var(--text-secondary)",
               fontSize: "0.85rem"
             }}>
-              <span style={{ color: "#4CAF50", fontSize: "1rem" }}>✓</span>
+              <Check size={16} style={{ color: "#4CAF50" }} />
               <span>Secure Trading</span>
             </div>
             <div style={{
@@ -164,7 +167,7 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
               color: "var(--text-secondary)",
               fontSize: "0.85rem"
             }}>
-              <span style={{ color: "#4CAF50", fontSize: "1rem" }}>✓</span>
+              <Check size={16} style={{ color: "#4CAF50" }} />
               <span>Verified Accounts</span>
             </div>
             <div style={{
@@ -174,7 +177,7 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
               color: "var(--text-secondary)",
               fontSize: "0.85rem"
             }}>
-              <span style={{ color: "#4CAF50", fontSize: "1rem" }}>✓</span>
+              <Check size={16} style={{ color: "#4CAF50" }} />
               <span>Instant Delivery</span>
             </div>
             <div style={{
@@ -184,7 +187,7 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
               color: "var(--text-secondary)",
               fontSize: "0.85rem"
             }}>
-              <span style={{ color: "#4CAF50", fontSize: "1rem" }}>✓</span>
+              <Check size={16} style={{ color: "#4CAF50" }} />
               <span>24/7 Support</span>
             </div>
           </div>
@@ -196,7 +199,7 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
               onMouseEnter={() => setIsHoveringSignIn(true)}
               onMouseLeave={() => setIsHoveringSignIn(false)}
               className="btn-primary"
-              style={{ 
+              style={{
                 flex: 1,
                 padding: "14px 24px",
                 fontSize: "0.95rem",
@@ -205,17 +208,21 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
                 color: isHoveringSignIn ? "var(--accent)" : "white",
                 transform: isHoveringSignIn ? "translateY(-2px)" : "translateY(0)",
                 boxShadow: isHoveringSignIn ? "0 8px 25px rgba(21, 101, 192, 0.4)" : "none",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px"
               }}
             >
-              🔐 Sign In
+              <Lock size={18} /> Sign In
             </button>
             <button
               onClick={() => onSignUp()}
               onMouseEnter={() => setIsHoveringSignUp(true)}
               onMouseLeave={() => setIsHoveringSignUp(false)}
               className="btn-outline"
-              style={{ 
+              style={{
                 flex: 1,
                 padding: "14px 24px",
                 fontSize: "0.95rem",
@@ -225,10 +232,14 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
                 borderColor: isHoveringSignUp ? "var(--accent)" : "var(--border-glass)",
                 transform: isHoveringSignUp ? "translateY(-2px)" : "translateY(0)",
                 boxShadow: isHoveringSignUp ? "0 8px 25px rgba(21, 101, 192, 0.3)" : "none",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px"
               }}
             >
-              👤 Sign Up
+              <UserPlus size={18} /> Sign Up
             </button>
           </div>
 
@@ -245,7 +256,7 @@ export default function AuthPrompt({ onClose, onSignIn, onSignUp }: AuthPromptPr
             color: "#4CAF50",
             fontWeight: 600
           }}>
-            <span style={{ fontSize: "0.9rem" }}>🛡️</span>
+            <ShieldCheck size={16} />
             <span>Secure & Trusted</span>
           </div>
         </div>

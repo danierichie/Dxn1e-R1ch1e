@@ -22,8 +22,14 @@ export async function POST(request: Request) {
   if (!supabase) {
     return NextResponse.json({ error: "Database not configured" }, { status: 503 });
   }
-  const submission = await request.json();
-  const { error } = await supabase.from("sell_submissions").insert({ data: submission });
+  const body = await request.json();
+  const submission = body.submission ?? body;
+  const created_by = body.created_by || null;
+
+  const { error } = await supabase.from("sell_submissions").insert({ 
+    data: submission,
+    created_by: created_by
+  });
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

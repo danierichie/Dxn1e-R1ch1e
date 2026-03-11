@@ -1,37 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { compare } from "bcryptjs";
 import { z } from "zod";
-import { writeFileSync, readFileSync, existsSync } from "fs";
-import { join } from "path";
-
-// File-based storage
-const USERS_FILE = join(process.cwd(), 'data', 'users.json');
-
-const getUsers = () => {
-  try {
-    if (existsSync(USERS_FILE)) {
-      const data = readFileSync(USERS_FILE, 'utf-8');
-      return JSON.parse(data);
-    }
-    return [];
-  } catch (error) {
-    console.error('Error reading users file:', error);
-    return [];
-  }
-};
-
-const saveUsers = (users: any[]) => {
-  try {
-    const dataDir = join(process.cwd(), 'data');
-    if (!existsSync(dataDir)) {
-      // Create data directory if it doesn't exist
-      require('fs').mkdirSync(dataDir, { recursive: true });
-    }
-    writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
-  } catch (error) {
-    console.error('Error saving users file:', error);
-  }
-};
+import { getSupabase } from "@/lib/supabase-server";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -45,13 +15,22 @@ export async function POST(request: NextRequest) {
     // Validate input
     const { email, password } = loginSchema.parse(body);
 
-    // Get users from file storage
-    const users = getUsers();
+    const supabase = getSupabase();
+    if (!supabase) {
+      return NextResponse.json(
+        { error: "Supabase connection not configured" },
+        { status: 500 }
+      );
+    }
     
-    // Find user by email
-    const user = users.find((u: any) => u.email === email);
+    // Find user by email in Supabase
+    const { data: user, error: fetchError } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email)
+      .single();
     
-    if (!user) {
+    if (!user || fetchError) {
       return NextResponse.json(
         { error: "Invalid email or password" },
         { status: 401 }
@@ -59,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify password
-    const isPasswordValid = await compare(password, user.password);
+    const isPasswordValid = await compare(password, user.password_hash);
     
     if (!isPasswordValid) {
       return NextResponse.json(
@@ -68,16 +47,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update last login
-    user.lastLogin = new Date().toISOString();
-    saveUsers(users);
+    // Note: Schema doesn't have last_login column yet, so skipping update for now.
+    // If you want to track last login, we should add that column to the users table.
 
-    // Return user data (without password)
-    const { password: _, ...userWithoutPassword } = user;
+    // Return user data formatted for frontend
+    const userResponse = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      fullName: user.display_name,
+      role: user.role,
+      createdAt: user.created_at
+    };
     
     return NextResponse.json({
       message: "Login successful",
-      user: userWithoutPassword
+      user: userResponse
     });
 
   } catch (error) {
@@ -96,3 +81,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
